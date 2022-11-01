@@ -1,0 +1,113 @@
+steer:
+    geom:
+        radius: 1
+        length: 1
+
+    inertial:
+        mass: 1
+        inertia:
+            ixx: 0.01
+            iyy: 0.01
+            izz: 0.01
+            ixy: 0
+            ixz: 0
+            iyz: 0
+
+        origin:
+            position:
+                x: 0
+                y: 0
+                z: 0
+            orientation:
+                roll: 0
+                pitch: 0
+                yaw: 0
+
+
+drive:
+    geom:
+        radius: 0.15
+        length: 0.15
+
+    inertial:
+        mass: 1
+        inertia:
+            ixx: 0.05
+            iyy: 0.05
+            izz: 0.05
+            ixy: 0
+            ixz: 0
+            iyz: 0
+
+        origin:
+            position:
+                x: 0
+                y: 0
+                z: 0
+            orientation:
+                roll: 0
+                pitch: 0
+                yaw: 0
+    
+    visual:
+        mesh: true
+        mesh_scale:
+            x: 1
+            y: 1
+            z: 1
+        filename: "wheel_v2.STL"
+        origin_mesh:
+            position:
+                x: 0
+                y: 0.016
+                z: 0
+            orientation:
+                roll: 0
+                pitch: 0
+                yaw: 0
+            
+        origin_simple_geom:
+            position:
+                x: 0
+                y: 0
+                z: 0
+            orientation:
+                roll: 0
+                pitch: 0
+                yaw: 0
+
+
+
+    collision:
+        active: false
+        mesh: true
+        filename: "wheel_v2.STL"
+
+
+
+steer_joint:
+    type: "revolute"
+    origin:
+        position:
+            x: 0.36574 #0.35933
+            y: 0.22150
+            z: -0.07368
+
+        orientation:
+            roll: 0
+            pitch: 0
+            yaw: 0
+
+
+drive_joint:
+    type: "continuous"
+    origin:
+        position:
+            x: 0
+            y: 0
+            z: 0
+
+        orientation:
+            roll: 0
+            pitch: 0
+            yaw: 0

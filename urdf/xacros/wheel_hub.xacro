@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Archimede">
+	<xacro:macro name="rover_wheel_hub" params="name side reflect1 reflect2">
+		<xacro:property name="filename" value="$(find robot4ws_description)/urdf/config/wheel_hub.yaml"/>
+		<xacro:property name="wheel_config" value="${load_yaml (filename)}"/>
+
+
+        <!-- Define here steer link-->
+        <link name="${name}_${side}_steer_link">
+            <inertial>
+                <xacro:property name="tmp" value="${wheel_config['steer']['inertial']}"/>
+                <origin xyz="${tmp['origin']['position']['x']} ${tmp['origin']['position']['y']} ${tmp['origin']['position']['z']}"
+                rpy="${tmp['origin']['orientation']['roll']} ${tmp['origin']['orientation']['pitch']} ${tmp['origin']['orientation']['yaw']}"/>
+                <mass value="${tmp['mass']}"/>
+                <inertia ixx="${tmp['inertia']['ixx']}" iyy="${tmp['inertia']['iyy']}" izz="${tmp['inertia']['iyy']}" ixy="${tmp['inertia']['ixy']}" ixz="${tmp['inertia']['ixz']}" iyz="${tmp['inertia']['iyz']}"/>
+            </inertial>
+
+        </link>
+
+        <!-- Define here steer joint -->
+        <joint name="${name}_${side}_steer_joint" type="${wheel_config['steer_joint']['type']}">
+            <xacro:property name="tmp" value="${wheel_config['steer_joint']}"/>
+            <origin xyz="${reflect1*tmp['origin']['position']['x']} ${reflect2*tmp['origin']['position']['y']} ${tmp['origin']['position']['z']}"
+                rpy="${tmp['origin']['orientation']['roll']} ${tmp['origin']['orientation']['pitch']} ${tmp['origin']['orientation']['yaw']+(reflect2 -1)*pi/2}"/>
+            <parent link="${name}_base_link"/>
+            <child link="${name}_${side}_steer_link"/>
+            <axis xyz="0 0 1"/>
+            <limit lower="-3.14" upper="3.14" velocity="1e6" effort="1e6"/>
+        </joint>
+
+
+
+        <!-- Define here wheel link -->
+        <link name="${name}_${side}_wheel_link">
+            <inertial>
+                <xacro:property name="tmp" value="${wheel_config['drive']['inertial']}"/>
+                <origin xyz="${tmp['origin']['position']['x']} ${tmp['origin']['position']['y']} ${tmp['origin']['position']['z']}"
+                rpy="${tmp['origin']['orientation']['roll']} ${tmp['origin']['orientation']['pitch']} ${tmp['origin']['orientation']['yaw']}"/>
+                <mass value="${tmp['mass']}"/>
+                <inertia ixx="${tmp['inertia']['ixx']}" iyy="${tmp['inertia']['iyy']}" izz="${tmp['inertia']['iyy']}" ixy="${tmp['inertia']['ixy']}" ixz="${tmp['inertia']['ixz']}" iyz="${tmp['inertia']['iyz']}"/>
+            </inertial>
+
+            <visual>
+                <xacro:property name="data" value="${wheel_config['drive']['visual']}"/>
+                <xacro:if value="${data['mesh']}">
+                    <!-- Use mesh for visualization -->
+                    <xacro:property name="data_tmp" value="${data['origin_mesh']}"/>
+                    <origin xyz="${data_tmp['position']['x']} ${data_tmp['position']['y']} ${data_tmp['position']['z']}"
+                    rpy="${data_tmp['orientation']['roll']} ${data_tmp['orientation']['pitch']} ${data_tmp['orientation']['yaw']}"/>
+                    <geometry>
+                        <mesh filename="package://robot4ws_description/meshes/${data['filename']}" scale="${data['mesh_scale']['x']} ${data['mesh_scale']['y']} ${data['mesh_scale']['z']}"/>
+                    </geometry>
+                    <material name="gray"/>
+                </xacro:if>
+
+                <xacro:unless value="${data['mesh']}">
+                    <!-- Use box as simple geometry visualization -->
+                    <xacro:property name="data_tmp" value="${data['origin_simple_geom']}"/>
+                    <origin xyz="${data_tmp['position']['x']} ${data_tmp['position']['y']} ${data_tmp['position']['z']}"
+                    rpy="${data_tmp['orientation']['roll']} ${data_tmp['orientation']['pitch']} ${data_tmp['orientation']['yaw']}"/>
+                    <geometry>
+                        <cylinder size="${wheel_config['drive']['geometry']['radius']} ${wheel_config['drive']['geometry']['length']}"/>
+                    </geometry>
+                    <material name="gray"/>
+                </xacro:unless>
+            </visual>
+            <collision>
+                <xacro:property name="data" value="${wheel_config['drive']['visual']}"/>
+                <xacro:if value="${data['mesh']}">
+                    <!-- Use mesh for visualization -->
+                    <xacro:property name="data_tmp" value="${data['origin_mesh']}"/>
+                    <origin xyz="${data_tmp['position']['x']} ${data_tmp['position']['y']} ${data_tmp['position']['z']}"
+                    rpy="${data_tmp['orientation']['roll']} ${data_tmp['orientation']['pitch']} ${data_tmp['orientation']['yaw']}"/>
+                    <geometry>
+                        <mesh filename="package://robot4ws_description/meshes/${data['filename']}" scale="${data['mesh_scale']['x']} ${data['mesh_scale']['y']} ${data['mesh_scale']['z']}"/>
+                    </geometry>
+                </xacro:if>
+
+                <xacro:unless value="${data['mesh']}">
+                    <!-- Use box as simple geometry visualization -->
+                    <xacro:property name="data_tmp" value="${data['origin_simple_geom']}"/>
+                    <origin xyz="${data_tmp['position']['x']} ${data_tmp['position']['y']} ${data_tmp['position']['z']}"
+                    rpy="${data_tmp['orientation']['roll']} ${data_tmp['orientation']['pitch']} ${data_tmp['orientation']['yaw']}"/>
+                    <geometry>
+                        <cylinder size="${wheel_config['drive']['geometry']['radius']} ${wheel_config['drive']['geometry']['length']}"/>
+                    </geometry>
+                </xacro:unless>
+            </collision>
+        </link>
+
+
+        <!-- Define here drive joint (RIVEDERE) --> 
+
+        <joint name="${name}_${side}_drive_joint" type="${wheel_config['drive_joint']['type']}">
+            <xacro:property name="tmp" value="${wheel_config['drive_joint']}"/>
+            
+            <origin xyz="${reflect1*tmp['origin']['position']['x']} ${reflect2*tmp['origin']['position']['y']} ${tmp['origin']['position']['z']}"
+                rpy="${tmp['origin']['orientation']['roll']} ${tmp['origin']['orientation']['pitch']} ${tmp['origin']['orientation']['yaw']}"/>
+            <parent link="${name}_${side}_steer_link"/>
+            <child link="${name}_${side}_wheel_link"/>
+            <axis xyz="0 0 1"/>
+        </joint>
+
+
+        <gazebo reference="${name}_${side}_wheel_link">
+            <material>Gazebo/Gray</material>
+        </gazebo>
+    <!-- Define here the transmission -->
+
+    </xacro:macro>
+</robot>

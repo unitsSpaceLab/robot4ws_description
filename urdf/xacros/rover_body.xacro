@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Archimede">
+	<xacro:macro name="rover_base" params="name">
+		<xacro:property name="filename" value="$(find robot4ws_description)/urdf/config/body.yaml"/>
+		<xacro:property name="body_config" value="${load_yaml (filename)}"/>
+
+		<!-- Define world link-->
+		<link name="world"/>
+
+
+		<!-- Define rover base link-->
+		<link name="${name}_base_link">
+			<inertial>
+				<xacro:property name="data" value="${body_config['body']['inertial']}"/>
+				<mass value="${data['mass']}"/>
+				<origin xyz="${data['origin']['position']['x']} ${data['origin']['position']['y']} ${data['origin']['position']['z']}"
+				 rpy="${data['origin']['orientation']['roll']} ${data['origin']['orientation']['pitch']} ${data['origin']['orientation']['yaw']}"/>
+				<inertia ixx="1.71402" ixy="0.0" ixz="0.0" iyy="0.8856" iyz="0.0" izz="2.5725"/>
+			</inertial>
+			<visual name="${name}_body_visual">
+				<xacro:property name="data" value="${body_config['body']['visual']}"/>
+				<xacro:if value="${data['mesh']}">
+					<!-- Use mesh for visualization -->
+					<xacro:property name="data_tmp" value="${data['origin_mesh']}"/>
+					<origin xyz="${data_tmp['position']['x']} ${data_tmp['position']['y']} ${data_tmp['position']['z']}"
+					rpy="${data_tmp['orientation']['roll']} ${data_tmp['orientation']['pitch']} ${data_tmp['orientation']['yaw']}"/>
+					<geometry>
+						<mesh filename="package://robot4ws_description/meshes/${data['filename']}" scale="${data['mesh_scale']['x']} ${data['mesh_scale']['y']} ${data['mesh_scale']['z']}"/>
+					</geometry>
+					<material name="black"/>
+				</xacro:if>
+
+				<xacro:unless value="${data['mesh']}">
+					<!-- Use box as simple geometry visualization -->
+					<xacro:property name="data_tmp" value="${data['origin_simple_geom']}"/>
+					<origin xyz="${data_tmp['position']['x']} ${data_tmp['position']['y']} ${data_tmp['position']['z']}"
+					rpy="${data_tmp['orientation']['roll']} ${data_tmp['orientation']['pitch']} ${data_tmp['orientation']['yaw']}"/>
+					<geometry>
+						<box size="${body_config['body']['geometry']['body_length']} ${body_config['body']['geometry']['body_width']} ${body_config['body']['geometry']['body_heigth']}"/>
+					</geometry>
+				</xacro:unless>
+			</visual>
+		</link>
+
+
+		<!-- Define here the world joint -->
+
+
+		<joint name="${name}_world_joint" type="${body_config['joint']['type']}">
+			<xacro:property name="tmp" value="${body_config['joint']['origin']}"/>
+			<parent link="world"/>
+			<child link="${name}_base_link"/>
+			<origin xyz="${tmp['position']['x']} ${tmp['position']['y']} ${tmp['position']['z']}"
+			rpy="${tmp['orientation']['roll']} ${tmp['orientation']['pitch']} ${tmp['orientation']['yaw']}"/>
+			<axis xyz="0 0 1"/>
+		</joint>
+
+
+		<gazebo reference="${name}_base_link">
+			<material>Gazebo/Black</material>
+		</gazebo>
+
+	</xacro:macro>
+</robot>

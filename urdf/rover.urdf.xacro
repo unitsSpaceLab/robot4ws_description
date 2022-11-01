@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Archimede">
+	<xacro:include filename="$(find robot4ws_description)/urdf/xacros/rover_body.xacro"/>
+	<xacro:include filename="$(find robot4ws_description)/urdf/xacros/wheel_hub.xacro"/>
+	<xacro:include filename="$(find robot4ws_description)/urdf/xacros/materials.xacro"/>
+
+
+	<!-- Include rover base -->
+	<xacro:rover_base name="Archimede">
+	</xacro:rover_base>
+
+	<!-- Inlcude Front-Left wheel hub -->
+	<xacro:rover_wheel_hub name="Archimede" side="fl" reflect1="1" reflect2="1">
+	</xacro:rover_wheel_hub>
+
+
+	<!-- Include Back-Left wheel hub -->
+	<xacro:rover_wheel_hub name="Archimede" side="bl" reflect1="-1" reflect2="1">
+	</xacro:rover_wheel_hub>
+
+
+	<!-- Include Back-Left wheel hub -->
+	<xacro:rover_wheel_hub name="Archimede" side="fr" reflect1="1" reflect2="-1">
+	</xacro:rover_wheel_hub>
+
+
+	<!-- Include Back-Left wheel hub -->
+	<xacro:rover_wheel_hub name="Archimede" side="br" reflect1="-1" reflect2="-1">
+	</xacro:rover_wheel_hub>
+</robot>
+

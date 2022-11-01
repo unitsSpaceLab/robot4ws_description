@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>robot4ws_description</name>
+  <version>1.0.0</version>
+  <description>The robot4ws_description package</description>
+
+  <maintainer email="matteo.caruso@phd.units.it">Matteo Caruso</maintainer>
+
+  <license>GPLv3</license>
+
+  <url type="website">http://wiki.ros.org/robot4ws_description</url>
+
+  <author email="matteo.caruso@phd.units.it">Matteo Caruso</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>urdf</depend>
+  <depend>xacro</depend>
+
+
+</package>
