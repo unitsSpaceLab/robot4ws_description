@@ -60,7 +60,7 @@ body:
 
 
 joint:
-    type: "floating"
+    type: "fixed"
     origin:
         position:
             x: 0

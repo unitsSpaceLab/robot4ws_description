@@ -5,11 +5,11 @@
 		<xacro:property name="body_config" value="${load_yaml (filename)}"/>
 
 		<!-- Define world link-->
-		<link name="world"/>
+		<link name="${name}_base_link"/>
 
 
 		<!-- Define rover base link-->
-		<link name="${name}_base_link">
+		<link name="${name}_base_link_dummy">
 			<inertial>
 				<xacro:property name="data" value="${body_config['body']['inertial']}"/>
 				<mass value="${data['mass']}"/>
@@ -48,8 +48,8 @@
 
 		<joint name="${name}_world_joint" type="${body_config['joint']['type']}">
 			<xacro:property name="tmp" value="${body_config['joint']['origin']}"/>
-			<parent link="world"/>
-			<child link="${name}_base_link"/>
+			<parent link="${name}_base_link"/>
+			<child link="${name}_base_link_dummy"/>
 			<origin xyz="${tmp['position']['x']} ${tmp['position']['y']} ${tmp['position']['z']}"
 			rpy="${tmp['orientation']['roll']} ${tmp['orientation']['pitch']} ${tmp['orientation']['yaw']}"/>
 			<axis xyz="0 0 1"/>

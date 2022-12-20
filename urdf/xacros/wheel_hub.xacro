@@ -22,7 +22,7 @@
             <xacro:property name="tmp" value="${wheel_config['steer_joint']}"/>
             <origin xyz="${reflect1*tmp['origin']['position']['x']} ${reflect2*tmp['origin']['position']['y']} ${tmp['origin']['position']['z']}"
                 rpy="${tmp['origin']['orientation']['roll']} ${tmp['origin']['orientation']['pitch']} ${tmp['origin']['orientation']['yaw']+(reflect2 -1)*pi/2}"/>
-            <parent link="${name}_base_link"/>
+            <parent link="${name}_base_link_dummy"/>
             <child link="${name}_${side}_steer_link"/>
             <axis xyz="0 0 1"/>
             <limit lower="-3.14" upper="3.14" velocity="1e6" effort="1e6"/>
