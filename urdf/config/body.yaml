@@ -55,7 +55,7 @@ body:
 
     collision:
         active: false
-        mesh: true
+        mesh: false
         filename: "rover_chassis_v7.STL"
 
 
@@ -65,7 +65,7 @@ joint:
         position:
             x: 0
             y: 0
-            z: 0.4
+            z: 0 # 0.4
 
         orientation:
             roll: 0

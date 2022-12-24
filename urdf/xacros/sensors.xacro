@@ -1,0 +1,180 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Archimede">
+    <xacro:arg name="visualize_imu" default="true"/>
+    <xacro:arg name="visualize_scan" default="true"/>
+    <xacro:arg name="visualize_pi_camera" default="true"/>
+
+	<xacro:macro name="rover_sensors" params="name">
+        <gazebo reference="${name}_imu_link">
+            <sensor type="imu" name="imu">
+            <always_on>true</always_on>
+            <visualize>$(arg visualize_imu)</visualize>
+            </sensor>
+            <material>Gazebo/Grey</material>
+        </gazebo>
+
+
+
+
+
+        <gazebo reference="${name}_scan_link">
+            <material>Gazebo/FlatBlack</material>
+            <sensor type="ray" name="lds_lfcd_sensor">
+            <pose>0 0 0 0 0 0</pose>
+            <visualize>$(arg visualize_scan)</visualize>
+            <update_rate>5</update_rate>
+            <ray>
+                <scan>
+                <horizontal>
+                    <samples>360</samples>
+                    <resolution>1</resolution>
+                    <min_angle>0.0</min_angle>
+                    <max_angle>6.28319</max_angle>
+                </horizontal>
+                </scan>
+                <range>
+                <min>0.2</min>
+                <max>3.5</max>
+                <resolution>0.015</resolution>
+                </range>
+                <noise>
+                <type>gaussian</type>
+                <mean>0.0</mean>
+                <stddev>0.01</stddev>
+                </noise>
+            </ray>
+            <plugin name="gazebo_ros_lds_lfcd_controller" filename="libgazebo_ros_laser.so">
+                <topicName>${name}/scan</topicName>
+                <frameName>${name}_scan_link</frameName>
+            </plugin>
+            </sensor>
+        </gazebo>
+
+        <gazebo reference="${name}_pi_camera_link">
+            <sensor type="camera" name="${name}_raspi_camera">
+            <always_on>true</always_on>
+            <visualize>$(arg visualize_pi_camera)</visualize>
+            <camera>
+                <horizontal_fov>1.085595</horizontal_fov>
+                <image>
+                    <width>640</width>
+                    <height>480</height>
+                    <format>R8G8B8</format>
+                </image>
+                <clip>
+                    <near>0.03</near>
+                    <far>100</far>
+                </clip>
+            </camera>
+            <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+                <alwaysOn>true</alwaysOn>
+                <updateRate>30.0</updateRate>
+                <cameraName>/Archimede/pi_camera</cameraName>
+                <frameName>${name}_pi_camera_color_optical_frame</frameName>
+                <imageTopicName>rgb/image_raw</imageTopicName>
+                <cameraInfoTopicName>rgb/camera_info</cameraInfoTopicName>
+                <hackBaseline>0.07</hackBaseline>
+                <distortionK1>0.0</distortionK1>
+                <distortionK2>0.0</distortionK2>
+                <distortionK3>0.0</distortionK3>
+                <distortionT1>0.0</distortionT1>
+                <distortionT2>0.0</distortionT2>
+            </plugin>
+            </sensor>
+        </gazebo>
+
+
+
+
+
+        <!-- <gazebo reference="${name}_realsense_d435i_link">
+            <sensor name="${name}_d435i_color" type="camera">
+                <camera name="${name}_d435i">
+                <horizontal_fov>1.2112585008840648</horizontal_fov>
+                <image>
+                    <width>1920</width>
+                    <height>1080</height>
+                    <format>RGB_INT8</format>
+                </image>
+                <clip>
+                    <near>0.1</near>
+                    <far>100</far>
+                </clip>
+                <noise>
+                    <type>gaussian</type>
+                    <mean>0.0</mean>
+                    <stddev>0.007</stddev>
+                </noise>
+                </camera>
+                <always_on>1</always_on>
+                <update_rate>30</update_rate>
+                <visualize>1</visualize>
+            </sensor>
+            <sensor name="${name}_d435i_infrared_1" type="camera">
+                <camera name="${name}_d435i">
+                <horizontal_fov>1.4870205226991688</horizontal_fov>
+                <image>
+                    <width>1280</width>
+                    <height>720</height>
+                    <format>L_INT8</format>
+                </image>
+                <clip>
+                    <near>0.1</near>
+                    <far>100</far>
+                </clip>
+                <noise>
+                    <type>gaussian</type>
+                    <mean>0.0</mean>
+                    <stddev>0.05</stddev>
+                </noise>
+                </camera>
+                <always_on>1</always_on>
+                <update_rate>90</update_rate>
+                <visualize>0</visualize>
+            </sensor>
+            <sensor name="${name}_d435i_infrared_2" type="camera">
+                <camera name="${name}_d435i">
+                <horizontal_fov>1.4870205226991688</horizontal_fov>
+                <image>
+                    <width>1280</width>
+                    <height>720</height>
+                    <format>L_INT8</format>
+                </image>
+                <clip>
+                    <near>0.1</near>
+                    <far>100</far>
+                </clip>
+                <noise>
+                    <type>gaussian</type>
+                    <mean>0.0</mean>
+                    <stddev>0.05</stddev>
+                </noise>
+                </camera>
+                <always_on>1</always_on>
+                <update_rate>90</update_rate>
+                <visualize>0</visualize>
+            </sensor>
+            <sensor name="${name}_d435i_depth" type="depth">
+                <camera name="${name}_d435i">
+                <horizontal_fov>1.4870205226991688</horizontal_fov>
+                <image>
+                    <width>1280</width>
+                    <height>720</height>
+                </image>
+                <clip>
+                    <near>0.1</near>
+                    <far>100</far>
+                </clip>
+                <noise>
+                    <type>gaussian</type>
+                    <mean>0.0</mean>
+                    <stddev>0.100</stddev>
+                </noise>
+                </camera>
+                <always_on>1</always_on>
+                <update_rate>90</update_rate>
+                <visualize>0</visualize>
+            </sensor>
+        </gazebo> -->
+    </xacro:macro>
+</robot>

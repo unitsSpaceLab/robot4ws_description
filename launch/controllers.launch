@@ -1,0 +1,10 @@
+<launch>
+    <arg name="basic_controllers" default="joint_state_controller"/>
+
+    <rosparam command="load" file="$(find robot4ws_description)/config/controllers/joints.yaml"/>
+
+
+    <node name="archimede_controller_basic" pkg="controller_manager" type="spawner" ns="/Archimede" args="$(arg basic_controllers)"/>
+
+
+</launch>

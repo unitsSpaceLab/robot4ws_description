@@ -43,6 +43,51 @@
 		</link>
 
 
+		<!-- DEFINE HERE THE IMU LINK -->
+		<link name="${name}_imu_link"/>
+		<joint name="${name}_imu_joint" type="fixed">
+			<parent link="${name}_base_link_dummy"/>
+			<child link="${name}_imu_link"/>
+			<origin xyz="0 0 0.08" rpy="0 0 0"/>
+		</joint>
+
+		<!-- DEFINE HERE THE SCAN LINK -->
+		<link name="${name}_scan_link"/>
+		<joint name="${name}_scan_joint" type="fixed">
+			<parent link="${name}_base_link_dummy"/>
+			<child link="${name}_scan_link"/>
+			<origin xyz="0 0 0.13" rpy="0 0 0"/>
+		</joint>
+
+
+		<!-- DEFINE HERE THE RASPBERRY PI CAMERA LINK -->
+		<link name="${name}_pi_camera_link"/>
+		<joint name="${name}_pi_camera_joint" type="fixed">
+			<parent link="${name}_base_link_dummy"/>
+			<child link="${name}_pi_camera_link"/>
+			<origin xyz="0.15 0 0.075" rpy="0 0 0"/>
+		</joint>
+
+		<link name="${name}_pi_camera_color_optical_frame"/>
+		<joint name="${name}_pi_camera_color_optical_joint" type="fixed">
+			<parent link="${name}_pi_camera_link"/>
+			<child link="${name}_pi_camera_color_optical_frame"/>
+			<origin xyz="0 0 0.005" rpy="0 0 0"/>
+		</joint>
+
+
+
+		<link name="${name}_realsense_d435i_link"/>
+		<joint name="${name}_realsense_joint" type="fixed">
+			<parent link="${name}_base_link_dummy"/>
+			<child link="${name}_realsense_d435i_link"/>
+			<origin xyz="0.15 0 0.2" rpy="0 0 0"/>
+		</joint>
+
+
+
+
+
 		<!-- Define here the world joint -->
 
 

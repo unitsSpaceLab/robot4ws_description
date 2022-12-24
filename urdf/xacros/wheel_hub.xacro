@@ -98,14 +98,35 @@
                 rpy="${tmp['origin']['orientation']['roll']} ${tmp['origin']['orientation']['pitch']} ${tmp['origin']['orientation']['yaw']}"/>
             <parent link="${name}_${side}_steer_link"/>
             <child link="${name}_${side}_wheel_link"/>
-            <axis xyz="0 0 1"/>
+            <axis xyz="0 1 0"/>
         </joint>
 
 
         <gazebo reference="${name}_${side}_wheel_link">
             <material>Gazebo/Gray</material>
         </gazebo>
+
+
     <!-- Define here the transmission -->
+        <transmission name="${name}_${side}_drive_transmission}">
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="${name}_${side}_drive_joint">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="${name}_${side}_drive_actuator}">
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission>
+
+        <transmission name="${name}_${side}_steer_transmission">
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="${name}_${side}_steer_joint">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="${name}_${side}_steer_actuator">
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission>
 
     </xacro:macro>
 </robot>

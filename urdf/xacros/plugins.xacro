@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Archimede">
+	<xacro:arg name="include_kinematics_plugin" default="true"/>
+    <xacro:arg name="realsense_point_could" default="false"/>
+    <!-- <xacro:arg name="" -->
+	<xacro:macro name="rover_plugins" params="name">
+
+        <gazebo>
+            <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+                <robotNamespace>/Archimede</robotNamespace>
+                <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+                <legacyModeNS>true</legacyModeNS>
+            </plugin>
+        </gazebo>
+
+
+        <gazebo>
+            <plugin name="${name}_kinematic_plugin" filename="libarchimede_kinematics_gazebo_ros_simulation_plugin.so"/>
+        </gazebo>
+        <gazebo>
+            <plugin name="${name}_odometry_plugin" filename="libarchimede_odometry_gazebo_plugin.so"/>
+        </gazebo>
+
+
+        <!-- INCLUDE HERE PLUGIN FOR IMU -->
+        <gazebo>
+            <plugin name="imu_plugin" filename="libgazebo_ros_imu.so">
+            <alwaysOn>true</alwaysOn>
+            <bodyName>${name}_imu_link</bodyName>
+            <frameName>${name}_imu_link</frameName>
+            <topicName>${name}/imu</topicName>
+            <serviceName>imu_service</serviceName>
+            <gaussianNoise>0.0</gaussianNoise>
+            <updateRate>0</updateRate>
+            <imu>
+                <noise>
+                <type>gaussian</type>
+                <rate>
+                    <mean>0.0</mean>
+                    <stddev>2e-4</stddev>
+                    <bias_mean>0.0000075</bias_mean>
+                    <bias_stddev>0.0000008</bias_stddev>
+                </rate>
+                <accel>
+                    <mean>0.0</mean>
+                    <stddev>1.7e-2</stddev>
+                    <bias_mean>0.1</bias_mean>
+                    <bias_stddev>0.001</bias_stddev>
+                </accel>
+                </noise>
+            </imu>
+            </plugin>
+        </gazebo>
+
+
+        <gazebo>
+            <plugin name="${name}_get_body_pose" filename="libarchimede_get_link_state.so">
+                <saveDir>$(find robot4ws_simulations)/data</saveDir>
+                <linkName>${name}_base_link</linkName>
+            </plugin>
+        </gazebo>
+
+
+    
+	</xacro:macro>
+</robot>

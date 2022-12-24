@@ -1,9 +1,24 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Archimede">
+	<xacro:arg name="include_plugins" default="true"/>
+	<xacro:arg name="include_kinematics_plugin" default="true"/>
+	<xacro:arg name="include_ros_control" default="true"/>
+	<xacro:arg name="realsense_use_nominal_extrinsics" default="true"/>
+	
+	
+
+	<!-- camera specific parameters -->
+	<xacro:arg name="topics_ns" default="Archimede"/>
+	<xacro:arg name="publish_pointcloud" default="true"/>
+	<xacro:arg name="add_plug" default="false"/>
+	
+	
 	<xacro:include filename="$(find robot4ws_description)/urdf/xacros/rover_body.xacro"/>
 	<xacro:include filename="$(find robot4ws_description)/urdf/xacros/wheel_hub.xacro"/>
 	<xacro:include filename="$(find robot4ws_description)/urdf/xacros/materials.xacro"/>
-
+	<xacro:include filename="$(find robot4ws_description)/urdf/xacros/plugins.xacro"/>
+	<xacro:include filename="$(find robot4ws_description)/urdf/xacros/sensors.xacro"/>
+	<xacro:include filename="$(find realsense2_description)/urdf/_d435i.urdf.xacro"/>
 
 	<!-- Include rover base -->
 	<xacro:rover_base name="Archimede">
@@ -27,5 +42,25 @@
 	<!-- Include Back-Left wheel hub -->
 	<xacro:rover_wheel_hub name="Archimede" side="br" reflect1="-1" reflect2="-1">
 	</xacro:rover_wheel_hub>
+
+
+	<!-- INCLUDE REALSENSE D435I STEREOCAMERA -->
+	<xacro:sensor_d435i name="rs_d435i" topics_ns="$(arg topics_ns)" parent="Archimede_realsense_d435i_link" use_nominal_extrinsics="$(arg realsense_use_nominal_extrinsics)" publish_pointcloud="$(arg publish_pointcloud)" add_plug="$(arg add_plug)">
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+	</xacro:sensor_d435i>
+	<!-- Include Sensors -->
+	<xacro:rover_sensors name="Archimede"/>
+
+	<!-- Include Rover Plugins -->
+	<xacro:if value="$(arg include_plugins)">
+		<xacro:rover_plugins name="Archimede"/>
+	</xacro:if>
+
+
+	
+
+
+
+
 </robot>
 
