@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Archimede">
-	<xacro:macro name="rover_wheel_hub" params="name side reflect1 reflect2">
+	<xacro:macro name="rover_wheel_hub" params="name side reflect1 reflect2 use_simple_wheel:=true">
 		<xacro:property name="filename" value="$(find robot4ws_description)/urdf/config/wheel_hub.yaml"/>
 		<xacro:property name="wheel_config" value="${load_yaml (filename)}"/>
 
@@ -59,14 +59,14 @@
                     <origin xyz="${data_tmp['position']['x']} ${data_tmp['position']['y']} ${data_tmp['position']['z']}"
                     rpy="${data_tmp['orientation']['roll']} ${data_tmp['orientation']['pitch']} ${data_tmp['orientation']['yaw']}"/>
                     <geometry>
-                        <cylinder size="${wheel_config['drive']['geometry']['radius']} ${wheel_config['drive']['geometry']['length']}"/>
+                        <cylinder radius="${wheel_config['drive']['geom']['radius']}" length="${wheel_config['drive']['geom']['length']}"/>
                     </geometry>
                     <material name="gray"/>
                 </xacro:unless>
             </visual>
             <collision>
                 <xacro:property name="data" value="${wheel_config['drive']['visual']}"/>
-                <xacro:if value="${data['mesh']}">
+                <xacro:unless value="${use_simple_wheel}">
                     <!-- Use mesh for visualization -->
                     <xacro:property name="data_tmp" value="${data['origin_mesh']}"/>
                     <origin xyz="${data_tmp['position']['x']} ${data_tmp['position']['y']} ${data_tmp['position']['z']}"
@@ -74,17 +74,32 @@
                     <geometry>
                         <mesh filename="package://robot4ws_description/meshes/${data['filename']}" scale="${data['mesh_scale']['x']} ${data['mesh_scale']['y']} ${data['mesh_scale']['z']}"/>
                     </geometry>
-                </xacro:if>
+                </xacro:unless>
 
-                <xacro:unless value="${data['mesh']}">
+                <xacro:if value="${use_simple_wheel}">
                     <!-- Use box as simple geometry visualization -->
                     <xacro:property name="data_tmp" value="${data['origin_simple_geom']}"/>
                     <origin xyz="${data_tmp['position']['x']} ${data_tmp['position']['y']} ${data_tmp['position']['z']}"
                     rpy="${data_tmp['orientation']['roll']} ${data_tmp['orientation']['pitch']} ${data_tmp['orientation']['yaw']}"/>
                     <geometry>
-                        <cylinder size="${wheel_config['drive']['geometry']['radius']} ${wheel_config['drive']['geometry']['length']}"/>
+                        <cylinder radius="${wheel_config['drive']['geom']['radius']}" length="${wheel_config['drive']['geom']['length']}"/>
                     </geometry>
-                </xacro:unless>
+                </xacro:if>
+                <surface>
+                    <friction>
+                    <ode>
+                        <mu>100.0</mu>
+                        <mu2>100.0</mu2>
+                    </ode>
+                    </friction>
+                    <contact>
+                    <ode>
+                        <kp>1e8</kp>
+                        <kd>1</kd>
+                        <min_depth>0.001</min_depth>
+                    </ode>
+                    </contact>
+                </surface>
             </collision>
         </link>
 

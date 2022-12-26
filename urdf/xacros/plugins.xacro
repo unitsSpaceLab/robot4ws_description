@@ -18,7 +18,21 @@
             <plugin name="${name}_kinematic_plugin" filename="libarchimede_kinematics_gazebo_ros_simulation_plugin.so"/>
         </gazebo>
         <gazebo>
-            <plugin name="${name}_odometry_plugin" filename="libarchimede_odometry_gazebo_plugin.so"/>
+            <plugin name="${name}_odometry_plugin" filename="libarchimede_odometry_gazebo_plugin.so">
+                <!-- <topics_ns>Archimede<topics_ns/> -->
+                <integrator>Trapezi</integrator>
+                <odomTopicName>Archimede/odom</odomTopicName>
+                <odomQueSize>100</odomQueSize>
+                <odomFrameName>odom</odomFrameName>
+                <odomPublishRate>10</odomPublishRate>
+                <baseLinkFrameName>Archimede_foot_print</baseLinkFrameName>
+                <useFakePublishers>true</useFakePublishers>
+                <motorCurrentTopicName>Archimede/motor_current</motorCurrentTopicName>
+                <motorTemperatureTopicName>Archimede/motor_temperature</motorTemperatureTopicName>
+                <soundTopicName>Archimede/sound</soundTopicName>
+                <JointStateTopicName>Archimede/JointStateFake</JointStateTopicName>
+                <SensorStateTopicName>Archimede/sensor_state</SensorStateTopicName>
+            </plugin>
         </gazebo>
 
 
@@ -57,6 +71,31 @@
             <plugin name="${name}_get_body_pose" filename="libarchimede_get_link_state.so">
                 <saveDir>$(find robot4ws_simulations)/data</saveDir>
                 <linkName>${name}_base_link</linkName>
+                <readCOG>false</readCOG>
+                <worldMode>true</worldMode>
+            </plugin>
+        </gazebo>
+
+
+        <gazebo>
+            <plugin name="${name}_get_fr_steer_hub_pose" filename="libarchimede_get_link_state.so">
+                <saveDir>$(find robot4ws_simulations)/data</saveDir>
+                <linkName>${name}_fr_steer_link</linkName>
+                <readCOG>false</readCOG>
+                <worldMode>false</worldMode>
+            </plugin>
+        </gazebo>
+
+
+
+
+
+        <gazebo>
+            <plugin name="${name}_magetic_sensor" filename="libhector_gazebo_ros_magnetic.so">
+                <updateRate>100</updateRate>
+                <robotNamespace>Archimede</robotNamespace>
+                <bodyName>${name}_imu_link</bodyName>
+                <topicName>magnetic_field</topicName>
             </plugin>
         </gazebo>
 

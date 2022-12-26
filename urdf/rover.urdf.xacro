@@ -4,11 +4,13 @@
 	<xacro:arg name="include_kinematics_plugin" default="true"/>
 	<xacro:arg name="include_ros_control" default="true"/>
 	<xacro:arg name="realsense_use_nominal_extrinsics" default="true"/>
+	<xacro:arg name="show_cameras" default="true"/>
+	<xacro:arg name="show_laser_scan" default="true"/>
 	
 	
 
 	<!-- camera specific parameters -->
-	<xacro:arg name="topics_ns" default="Archimede"/>
+	<xacro:arg name="topics_ns" default="Archimede/d435i_camera"/>
 	<xacro:arg name="publish_pointcloud" default="true"/>
 	<xacro:arg name="add_plug" default="false"/>
 	
@@ -49,7 +51,8 @@
 		<origin xyz="0 0 0" rpy="0 0 0"/>
 	</xacro:sensor_d435i>
 	<!-- Include Sensors -->
-	<xacro:rover_sensors name="Archimede"/>
+	<xacro:rover_sensors name="Archimede">
+	</xacro:rover_sensors>
 
 	<!-- Include Rover Plugins -->
 	<xacro:if value="$(arg include_plugins)">
