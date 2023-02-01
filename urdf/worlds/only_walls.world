@@ -35,9 +35,9 @@
             </friction>
             <contact>
               <ode>
-                <kp>1e8</kp>
+                <!-- kp>1e8</kp>
                 <kd>1</kd>
-                <min_depth>0.001</min_depth>
+                <min_depth>0.001</min_depth -->
               </ode>
             </contact>
             <bounce/>
@@ -64,7 +64,8 @@
         <gravity>1</gravity>
       </link>
     </model>
-    <gravity>0 0 -9.8</gravity>
+    <!-- Gravity -->
+    <gravity>0 0 -9.81</gravity>
     <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
     <atmosphere type='adiabatic'/>
     <physics name='default_physics' default='0' type='ode'>
@@ -73,8 +74,8 @@
       <real_time_update_rate>1000</real_time_update_rate>
       <ode>
         <solver>
-          <type>world</type>
-          <iters>10000</iters>
+          <type>quick</type> <!-- world/quick -->
+          <iters>1000</iters>
         </solver>
       </ode>
     </physics>

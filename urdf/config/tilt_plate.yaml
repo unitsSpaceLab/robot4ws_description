@@ -1,0 +1,74 @@
+body:
+    geometry:
+        body_length: 0
+        body_width: 0
+        body_heigth: 0
+        
+    inertial:
+        mass: 0.1
+        inertia:
+            ixx: 0.05
+            iyy: 0.05
+            izz: 0.05
+            ixy: 0
+            ixz: 0
+            iyz: 0
+
+        origin:
+            position:
+                x: 0
+                y: 0
+                z: 0
+            orientation:
+                roll: 0
+                pitch: 0
+                yaw: 0
+
+    visual:
+        mesh: true
+        mesh_scale:
+            x: 0.001
+            y: 0.001
+            z: 0.001
+        filename: "tilt_plate.STL"
+        origin_mesh:
+            position:
+                x: 0
+                y: 0
+                z: 0
+            orientation:
+                roll: 0
+                pitch: 0
+                yaw: 0
+            
+        origin_simple_geom:
+            position:
+                x: 0
+                y: 0
+                z: 0
+            orientation:
+                roll: 0
+                pitch: 0
+                yaw: 0
+
+
+
+    collision:
+        active: false
+        mesh: false
+        filename: "tilt_plate.STL"
+
+
+joint:
+    type: "continuous"
+    origin:
+        position:
+            x: -0.068
+            y: 0
+            z: -0.0375
+
+        orientation:
+            roll: 0
+            pitch: 0
+            yaw: 0
+    

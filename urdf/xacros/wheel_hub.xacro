@@ -1,8 +1,19 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Archimede">
-	<xacro:macro name="rover_wheel_hub" params="name side reflect1 reflect2 use_simple_wheel:=true">
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Archimede" >
+    <xacro:arg name="point_contact" default="true"/>
+	<xacro:macro name="rover_wheel_hub" params="name side reflect1 reflect2 has_differential use_simple_wheel:=true">
 		<xacro:property name="filename" value="$(find robot4ws_description)/urdf/config/wheel_hub.yaml"/>
 		<xacro:property name="wheel_config" value="${load_yaml (filename)}"/>
+
+
+		<!-- Manage reflection -->
+        <!-- Get the legSide string (left/right) based on the value of reflect2 -->
+		<xacro:if value="${reflect2==1}">
+			<xacro:property name="legSide" value="left"/>
+		</xacro:if>
+		<xacro:if value="${reflect2==-1}">
+			<xacro:property name="legSide" value="right"/>
+		</xacro:if>
 
 
         <!-- Define here steer link-->
@@ -20,9 +31,19 @@
         <!-- Define here steer joint -->
         <joint name="${name}_${side}_steer_joint" type="${wheel_config['steer_joint']['type']}">
             <xacro:property name="tmp" value="${wheel_config['steer_joint']}"/>
-            <origin xyz="${reflect1*tmp['origin']['position']['x']} ${reflect2*tmp['origin']['position']['y']} ${tmp['origin']['position']['z']}"
-                rpy="${tmp['origin']['orientation']['roll']} ${tmp['origin']['orientation']['pitch']} ${tmp['origin']['orientation']['yaw']+(reflect2 -1)*pi/2}"/>
-            <parent link="${name}_base_link_dummy"/>
+            <!-- Manage the position of the wheels with respect to the model (with/without differential) -->
+            <!-- Without differential: wheel is attached to the body -->
+            <xacro:unless value="${has_differential}">
+                <origin xyz="${reflect1*tmp['origin']['position']['x']} ${reflect2*tmp['origin']['position']['y']} ${tmp['origin']['position']['z']}"
+                    rpy="${tmp['origin']['orientation']['roll']} ${tmp['origin']['orientation']['pitch']} ${tmp['origin']['orientation']['yaw']+(reflect2 -1)*pi/2}"/>
+                <parent link="${name}_base_link_dummy"/>
+            </xacro:unless>
+            <!-- With differential: wheel is attached to the leg -->
+            <xacro:if value="${has_differential}">
+                <origin xyz="${reflect1*tmp['origin']['position_withDifferential']['x']} ${reflect2*tmp['origin']['position_withDifferential']['y']} ${tmp['origin']['position_withDifferential']['z']}"
+                    rpy="${tmp['origin']['orientation']['roll']} ${tmp['origin']['orientation']['pitch']} ${tmp['origin']['orientation']['yaw']+(reflect2 -1)*pi/2}"/>
+                <parent link="${name}_leg_${legSide}"/>
+            </xacro:if>
             <child link="${name}_${side}_steer_link"/>
             <axis xyz="0 0 1"/>
             <limit lower="-3.14" upper="3.14" velocity="1e6" effort="1e6"/>
@@ -81,23 +102,30 @@
                     <xacro:property name="data_tmp" value="${data['origin_simple_geom']}"/>
                     <origin xyz="${data_tmp['position']['x']} ${data_tmp['position']['y']} ${data_tmp['position']['z']}"
                     rpy="${data_tmp['orientation']['roll']} ${data_tmp['orientation']['pitch']} ${data_tmp['orientation']['yaw']}"/>
-                    <geometry>
-                        <cylinder radius="${wheel_config['drive']['geom']['radius']}" length="${wheel_config['drive']['geom']['length']}"/>
-                    </geometry>
+                    <xacro:unless value="$(arg point_contact)">
+                        <geometry>
+                            <cylinder radius="${wheel_config['drive']['geom']['radius']}" length="0.001"/> <!-- "${wheel_config['drive']['geom']['length']}"/> -->
+                        </geometry>
+                    </xacro:unless>
+                    <xacro:if value="$(arg point_contact)">
+                        <geometry>
+                            <sphere radius="${wheel_config['drive']['geom']['radius']}"/>
+                        </geometry>
+                    </xacro:if>
                 </xacro:if>
                 <surface>
                     <friction>
-                    <ode>
-                        <mu>100.0</mu>
-                        <mu2>100.0</mu2>
-                    </ode>
+                        <ode>
+                            <!-- <mu>100.0</mu>
+                            <mu2>100.0</mu2> -->
+                        </ode>
                     </friction>
                     <contact>
-                    <ode>
-                        <kp>1e8</kp>
-                        <kd>1</kd>
-                        <min_depth>0.001</min_depth>
-                    </ode>
+                        <ode>
+                            <!-- <kp>1e8</kp>
+                            <kd>1</kd>
+                            <min_depth>0.001</min_depth> -->
+                        </ode>
                     </contact>
                 </surface>
             </collision>

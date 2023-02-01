@@ -1,0 +1,199 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Archimede">
+	<xacro:macro name="rover_leg" params="name reflect">
+		<xacro:property name="filename" value="$(find robot4ws_description)/urdf/config/leg.yaml"/>
+		<xacro:property name="body_config" value="${load_yaml (filename)}"/>
+
+		<!-- Manage reflection -->
+		<xacro:if value="${reflect==1}">
+			<xacro:property name="side" value="left"/>
+		</xacro:if>
+		<xacro:if value="${reflect==-1}">
+			<xacro:property name="side" value="right"/>
+		</xacro:if>
+		
+
+		<!-- Define rover base link-->
+
+		<link name="${name}_leg_${side}">
+			<inertial>
+				<xacro:property name="data" value="${body_config['body']['inertial']}"/>
+				<mass value="${data['mass']}"/>
+				<origin xyz="${data['origin']['position']['x']} ${data['origin']['position']['y']} ${data['origin']['position']['z']}"
+				 rpy="${data['origin']['orientation']['roll']} ${data['origin']['orientation']['pitch']} ${data['origin']['orientation']['yaw']}"/>
+				<inertia ixx="${data['inertia']['ixx']}" ixy="${data['inertia']['ixy']}" ixz="${data['inertia']['ixz']}"
+				 iyy="${data['inertia']['iyy']}" iyz="${data['inertia']['iyz']}" izz="${data['inertia']['izz']}"/>
+			</inertial>
+			<visual name="${name}_leg_${side}_visual">
+				<xacro:property name="data" value="${body_config['body']['visual']}"/>
+				<xacro:if value="${data['mesh']}">
+					<!-- Use mesh for visualization -->
+					<xacro:property name="data_tmp" value="${data['origin_mesh']}"/>
+					<origin xyz="${data_tmp['position']['x']} ${data_tmp['position']['y']} ${data_tmp['position']['z']}"
+					rpy="${data_tmp['orientation']['roll']} ${data_tmp['orientation']['pitch']} ${data_tmp['orientation']['yaw']}"/>
+					<geometry>
+						<mesh filename="package://robot4ws_description/meshes/${data['filename']}" scale="${data['mesh_scale']['x']} ${data['mesh_scale']['y']} ${data['mesh_scale']['z']}"/>
+					</geometry>
+					<material name="black"/>
+				</xacro:if>
+
+				<xacro:unless value="${data['mesh']}">
+					<!-- Use box as simple geometry visualization -->
+					<xacro:property name="data_tmp" value="${data['origin_simple_geom']}"/>
+					<origin xyz="${data_tmp['position']['x']} ${data_tmp['position']['y']} ${data_tmp['position']['z']}"
+					rpy="${data_tmp['orientation']['roll']} ${data_tmp['orientation']['pitch']} ${data_tmp['orientation']['yaw']}"/>
+					<geometry>
+						<box size="${body_config['body']['geometry']['body_length']} ${body_config['body']['geometry']['body_width']} ${body_config['body']['geometry']['body_heigth']}"/>
+					</geometry>
+				</xacro:unless>
+			</visual>
+		</link>
+
+
+		<!-- Define here the joint to the body -->
+
+		<joint name="${name}_leg_${side}_joint" type="${body_config['joint']['type']}">
+			<xacro:property name="tmp" value="${body_config['joint']['origin']}"/>
+			<parent link="${name}_base_link_dummy"/>
+			<child link="${name}_leg_${side}"/>
+			<!-- Consider reflect to change position and yaw angle in case we consider the specular leg -->
+			<!-- The expression ((-reflect+1)/2 * pi) is "0" when reflect is "1", and "pi" when it's "-1" -->
+			<!-- <origin xyz="${tmp['position']['x']} ${reflect * tmp['position']['y']} ${tmp['position']['z']}"
+			rpy="${tmp['orientation']['roll']} ${tmp['orientation']['pitch']} ${((-reflect+1)/2 * pi) + tmp['orientation']['yaw']}"/> -->
+			<origin xyz="${tmp['position']['x']} ${reflect * tmp['position']['y']} ${tmp['position']['z']}"
+			rpy="${tmp['orientation']['roll']} ${tmp['orientation']['pitch']} ${tmp['orientation']['yaw']}"/>
+			<axis xyz="0 1 0"/>
+			<!-- <dynamic damping="0.1"/> -->
+		</joint>
+
+
+
+
+
+		<!-- Define the left dummy link attached to the tilt plate -->
+		
+		<!-- <link name="${name}_${side}_link_legSide">
+			<inertial>
+				<origin xyz="0 0 0" rpy="0 0 0"/>
+				<mass value="1e-3"/>
+				<inertia ixx="1e-3" ixy="0" ixz="0" iyy="1e-3" iyz="0" izz="1e-3"/>
+			</inertial>
+			<visual>
+				Use disk as simple geometry visualization
+				<geometry>
+					<cylinder radius="0.01" length="0.100"/>
+				</geometry>
+			</visual>
+		</link> -->
+
+		<gazebo>
+			<!-- Define the link attached to the leg -->
+
+			<link name="${name}_${side}_link_legSide">
+				<pose relative_to="${name}_leg_${side}_universalJoint_legSide">0 0 0.050 0 0 0</pose>
+				<inertial>
+					<pose relative_to="${name}_leg_${side}">0 0 0 0 0 0</pose>
+					<mass>1e-3</mass>
+					<inertia>
+						<ixx>1e-3</ixx>
+						<ixy>0</ixy>
+						<ixz>0</ixz>
+						<iyy>1e-3</iyy>
+						<iyz>0</iyz>
+						<izz>1e-3</izz>
+					</inertia>
+				</inertial>
+				<visual name="${name}_${side}_link_legSide_visual">
+        			<pose relative_to="${name}_leg_${side}_universalJoint_legSide">0 0 0.034 0 0 0</pose>
+					<geometry>
+						<cylinder>
+							<radius>0.002</radius>
+							<length>0.068</length>
+						</cylinder>
+					</geometry>
+				</visual>
+			</link>
+
+
+			<!-- Define the leg-side universal joint -->
+		
+			<joint name="${name}_leg_${side}_universalJoint_legSide" type="universal">
+				<parent>${name}_leg_${side}</parent>
+				<child>${name}_${side}_link_legSide</child>
+				<pose relative_to="${name}_leg_${side}">0 ${-0.026*reflect} -0.050 0 ${-pi/2} 0</pose>
+				<axis>
+					<xyz>0 1 0</xyz>
+				</axis>
+				<axis2>
+					<xyz>0 0 1</xyz>
+				</axis2>
+			</joint>
+
+
+			<!-- Define the dummy link attached to the tilt-plate link -->
+
+			<link name="${name}_${side}_link_dummyTiltPlateSide">
+				<pose relative_to="${name}_${side}_link_legSide">0 0 0.018 0 0 0</pose>
+				<!-- <pose frame=''>0 0 0 0 0 0</pose> -->
+				<inertial>
+					<pose relative_to="${name}_${side}_link_legSide">0 0 0.018 0 0 0</pose>
+					<mass>1e-3</mass>
+					<inertia>
+						<ixx>1e-3</ixx>
+						<ixy>0</ixy>
+						<ixz>0</ixz>
+						<iyy>1e-3</iyy>
+						<iyz>0</iyz>
+						<izz>1e-3</izz>
+					</inertia>
+				</inertial>
+				<visual name="${name}_${side}_link_dummyTiltPlateSide_visual">
+        			<pose relative_to="$${name}_${side}_link_legSide">0 0 0.000 0 0 0</pose>
+					<geometry>
+						<cylinder>
+							<radius>0.005</radius>
+							<length>0.001</length>
+						</cylinder>
+					</geometry>
+				</visual>
+			</link>
+
+
+			<!-- Define the tiltPlate-side universal joint -->
+		
+			<joint name="${name}_leg_${side}_universalJoint_tiltPlateSide" type="universal">
+				<parent>${name}_${side}_link_legSide</parent>
+				<child>${name}_${side}_link_dummyTiltPlateSide</child>
+				<pose relative_to="${name}_${side}_link_legSide">0 0 0.018 0 0 0</pose>
+				<axis>
+					<xyz>0 1 0</xyz>
+				</axis>
+				<axis2>
+					<xyz>0 0 1</xyz>
+				</axis2>
+			</joint>
+		
+
+			<!-- Define the fixed joint that is attached to the tilt plate -->
+
+			<joint name="${name}_leg_${side}_fixedJoint_tiltPlateSide" type="fixed">
+				<parent>${name}_${side}_link_dummyTiltPlateSide</parent>
+				<child>${name}_tilt_plate</child>
+				<pose relative_to="${name}_tilt_plate">0 ${-0.107*reflect} -0.0125 0 0 0</pose>
+				<axis>
+					<xyz>0 1 0</xyz>
+				</axis>
+			</joint>
+
+		</gazebo>
+
+
+
+		<!-- Materials -->
+
+		<gazebo reference="${name}_leg_${side}">
+			<material>Gazebo/Black</material>
+		</gazebo>
+
+	</xacro:macro>
+</robot>

@@ -32,6 +32,8 @@
                 <soundTopicName>Archimede/sound</soundTopicName>
                 <JointStateTopicName>Archimede/JointStateFake</JointStateTopicName>
                 <SensorStateTopicName>Archimede/sensor_state</SensorStateTopicName>
+                <OdomMode>position</OdomMode>
+                <skipFrames>10</skipFrames>
             </plugin>
         </gazebo>
 

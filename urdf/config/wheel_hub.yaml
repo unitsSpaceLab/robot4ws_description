@@ -93,6 +93,11 @@ steer_joint:
             y: 0.22150
             z: -0.07368
 
+        position_withDifferential:
+            x: 0.36574 #0.35933
+            y: 0.0885
+            z: -0.07368
+
         orientation:
             roll: 0
             pitch: 0

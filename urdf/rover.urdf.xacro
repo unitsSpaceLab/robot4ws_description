@@ -6,16 +6,19 @@
 	<xacro:arg name="realsense_use_nominal_extrinsics" default="true"/>
 	<xacro:arg name="show_cameras" default="true"/>
 	<xacro:arg name="show_laser_scan" default="true"/>
-	
-	
+	<xacro:arg name="rocker_differential" default="false"/>
+
+
 
 	<!-- camera specific parameters -->
 	<xacro:arg name="topics_ns" default="Archimede/d435i_camera"/>
 	<xacro:arg name="publish_pointcloud" default="true"/>
 	<xacro:arg name="add_plug" default="false"/>
-	
-	
+
+
 	<xacro:include filename="$(find robot4ws_description)/urdf/xacros/rover_body.xacro"/>
+	<xacro:include filename="$(find robot4ws_description)/urdf/xacros/rover_differential.xacro"/>
+	<xacro:include filename="$(find robot4ws_description)/urdf/xacros/rover_leg.xacro"/>
 	<xacro:include filename="$(find robot4ws_description)/urdf/xacros/wheel_hub.xacro"/>
 	<xacro:include filename="$(find robot4ws_description)/urdf/xacros/materials.xacro"/>
 	<xacro:include filename="$(find robot4ws_description)/urdf/xacros/plugins.xacro"/>
@@ -23,26 +26,37 @@
 	<xacro:include filename="$(find realsense2_description)/urdf/_d435i.urdf.xacro"/>
 
 	<!-- Include rover base -->
-	<xacro:rover_base name="Archimede">
+	<xacro:rover_base name="Archimede" has_differential="$(arg rocker_differential)">
 	</xacro:rover_base>
 
+	<!-- Include legs if rocker_differential is flagged -->
+	<xacro:if value="$(arg rocker_differential)">
+		<xacro:rover_leg name="Archimede" reflect="1">
+		</xacro:rover_leg>
+		<xacro:rover_leg name="Archimede" reflect="-1">
+		</xacro:rover_leg>
+		<xacro:rover_differential name="Archimede">
+		</xacro:rover_differential>
+	</xacro:if>
+
+
 	<!-- Inlcude Front-Left wheel hub -->
-	<xacro:rover_wheel_hub name="Archimede" side="fl" reflect1="1" reflect2="1">
+	<xacro:rover_wheel_hub name="Archimede" side="fl" reflect1="1" reflect2="1" has_differential="$(arg rocker_differential)">
 	</xacro:rover_wheel_hub>
 
 
 	<!-- Include Back-Left wheel hub -->
-	<xacro:rover_wheel_hub name="Archimede" side="bl" reflect1="-1" reflect2="1">
+	<xacro:rover_wheel_hub name="Archimede" side="bl" reflect1="-1" reflect2="1" has_differential="$(arg rocker_differential)">
 	</xacro:rover_wheel_hub>
 
 
 	<!-- Include Back-Left wheel hub -->
-	<xacro:rover_wheel_hub name="Archimede" side="fr" reflect1="1" reflect2="-1">
+	<xacro:rover_wheel_hub name="Archimede" side="fr" reflect1="1" reflect2="-1" has_differential="$(arg rocker_differential)">
 	</xacro:rover_wheel_hub>
 
 
 	<!-- Include Back-Left wheel hub -->
-	<xacro:rover_wheel_hub name="Archimede" side="br" reflect1="-1" reflect2="-1">
+	<xacro:rover_wheel_hub name="Archimede" side="br" reflect1="-1" reflect2="-1" has_differential="$(arg rocker_differential)">
 	</xacro:rover_wheel_hub>
 
 
@@ -60,7 +74,7 @@
 	</xacro:if>
 
 
-	
+
 
 
 

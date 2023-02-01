@@ -1,7 +1,15 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Archimede">
-	<xacro:macro name="rover_base" params="name">
-		<xacro:property name="filename" value="$(find robot4ws_description)/urdf/config/body.yaml"/>
+	<xacro:macro name="rover_base" params="name has_differential">
+		<!-- Depending whether the has_differential flag is on, select the correct yaml file -->
+		<xacro:if value="${has_differential}">
+			<xacro:property name="filename" value="$(find robot4ws_description)/urdf/config/body_only.yaml"/>
+			<xacro:property name="filenameTiltPlate" value="$(find robot4ws_description)/urdf/config/tilt_plate.yaml"/>
+			<xacro:property name="body_config_tiltPlate" value="${load_yaml (filenameTiltPlate)}"/>
+		</xacro:if>
+		<xacro:unless value="${has_differential}">
+			<xacro:property name="filename" value="$(find robot4ws_description)/urdf/config/body.yaml"/>
+		</xacro:unless>
 		<xacro:property name="body_config" value="${load_yaml (filename)}"/>
 
 		<!-- Define world link-->
@@ -41,6 +49,109 @@
 				</xacro:unless>
 			</visual>
 		</link>
+		
+
+
+		<!-- Tilt plate (only with differential) -->
+		<xacro:if value="${has_differential}">
+			<link name="${name}_tilt_plate">
+				<inertial>
+					<xacro:property name="data" value="${body_config_tiltPlate['body']['inertial']}"/>
+					<mass value="${data['mass']}"/>
+					<origin xyz="${data['origin']['position']['x']} ${data['origin']['position']['y']} ${data['origin']['position']['z']}"
+					rpy="${data['origin']['orientation']['roll']} ${data['origin']['orientation']['pitch']} ${data['origin']['orientation']['yaw']}"/>
+					<inertia ixx="${data['inertia']['ixx']}" ixy="${data['inertia']['ixy']}" ixz="${data['inertia']['ixz']}"
+				 	iyy="${data['inertia']['iyy']}" iyz="${data['inertia']['iyz']}" izz="${data['inertia']['izz']}"/>
+				</inertial>
+				<visual name="${name}_tilt_plate_visual">
+					<xacro:property name="data" value="${body_config_tiltPlate['body']['visual']}"/>
+					<xacro:if value="${data['mesh']}">
+						<!-- Use mesh for visualization -->
+						<xacro:property name="data_tmp" value="${data['origin_mesh']}"/>
+						<origin xyz="${data_tmp['position']['x']} ${data_tmp['position']['y']} ${data_tmp['position']['z']}"
+						rpy="${data_tmp['orientation']['roll']} ${data_tmp['orientation']['pitch']} ${data_tmp['orientation']['yaw']}"/>
+						<geometry>
+							<mesh filename="package://robot4ws_description/meshes/${data['filename']}" scale="${data['mesh_scale']['x']} ${data['mesh_scale']['y']} ${data['mesh_scale']['z']}"/>
+						</geometry>
+						<material name="black"/>
+					</xacro:if>
+
+					<xacro:unless value="${data['mesh']}">
+						<!-- Use box as simple geometry visualization -->
+						<xacro:property name="data_tmp" value="${data['origin_simple_geom']}"/>
+						<origin xyz="${data_tmp['position']['x']} ${data_tmp['position']['y']} ${data_tmp['position']['z']}"
+						rpy="${data_tmp['orientation']['roll']} ${data_tmp['orientation']['pitch']} ${data_tmp['orientation']['yaw']}"/>
+						<geometry>
+							<box size="${body_config_tiltPlate['body']['geometry']['body_length']} ${body_config_tiltPlate['body']['geometry']['body_width']} ${body_config_tiltPlate['body']['geometry']['body_heigth']}"/>
+						</geometry>
+					</xacro:unless>
+				</visual>
+			</link>
+		</xacro:if>
+
+
+		<!-- Define here the joint of the tilt plate to the body -->
+		
+		<xacro:if value="${has_differential}">
+			<joint name="${name}_tilt_plate_joint" type="${body_config_tiltPlate['joint']['type']}">
+				<xacro:property name="tmp" value="${body_config_tiltPlate['joint']['origin']}"/>
+				<parent link="${name}_base_link_dummy"/>
+				<child link="${name}_tilt_plate"/>
+				<origin xyz="${tmp['position']['x']} ${tmp['position']['y']} ${tmp['position']['z']}"
+				rpy="${tmp['orientation']['roll']} ${tmp['orientation']['pitch']} ${tmp['orientation']['yaw']}"/>
+				<axis xyz="0 0 1"/>
+				<!-- <dynamic damping="0.1"/> -->
+			</joint>
+		</xacro:if>
+
+
+		<!-- Dummy joint link for the differential -->
+
+		<!-- <xacro:if value="${has_differential}">
+			<link name="${name}_dummy_disk">
+				<inertial>
+            		<origin xyz="0 0 0" rpy="0 0 0"/>
+					<mass value="1e-1"/>
+					<inertia ixx="1e-1" ixy="0" ixz="0" iyy="1e-1" iyz="0" izz="1e-1"/>
+				</inertial>
+				<visual>
+					Use disk as simple geometry visualization
+					<geometry>
+						<cylinder radius="0.05" length="0.05"/>
+						<box size="0.20 0.20 0.05"/>
+					</geometry>
+				</visual>
+			</link>
+		</xacro:if> -->
+
+
+		<!-- Define here the joint of the dummy disk -->
+		
+		<!-- <xacro:if value="${has_differential}">
+			<joint name="${name}_dummy_joint" type="revolute">
+				<parent link="${name}_base_link_dummy"/>
+				<child link="${name}_dummy_disk"/>
+				<origin xyz="0 0 0" rpy="${-pi/2} 0 0"/>
+				<axis xyz="0 0 1"/>
+				<limit lower="0" upper="0" effort="1e6" velocity="1e6"/>
+			</joint>
+		</xacro:if> -->
+
+		<!-- <xacro:if value="${has_differential}">
+			<gazebo reference="{name}_dummy_joint">
+				<disableFixedJointLumping>true</disableFixedJointLumping>
+				<preserveFixedJoint>true</preserveFixedJoint>
+			</gazebo>
+		</xacro:if> -->
+
+
+		<!-- Define here the color of the dummy disk -->
+
+		<!-- <xacro:if value="${has_differential}">
+			<gazebo reference="${name}_dummy_disk">
+				<material>Gazebo/Blue</material>
+			</gazebo>
+		</xacro:if> -->
 
 
 		<!-- DEFINE HERE THE IMU LINK -->
@@ -90,7 +201,6 @@
 
 		<!-- Define here the world joint -->
 
-
 		<joint name="${name}_world_joint" type="${body_config['joint']['type']}">
 			<xacro:property name="tmp" value="${body_config['joint']['origin']}"/>
 			<parent link="${name}_base_link"/>
@@ -99,6 +209,10 @@
 			rpy="${tmp['orientation']['roll']} ${tmp['orientation']['pitch']} ${tmp['orientation']['yaw']}"/>
 			<axis xyz="0 0 1"/>
 		</joint>
+
+		<!-- <gazebo reference="${name}_world_joint">
+			<preserveFixedJoint>false</preserveFixedJoint>
+		</gazebo> -->
 
 
 		<gazebo reference="${name}_base_link">
