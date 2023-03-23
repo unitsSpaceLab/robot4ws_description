@@ -1,5 +1,9 @@
+<!-- 
+     @author: Matteo Caruso
+     @email: matteo.caruso@phd.units.it
+     @email: matteo.caruso1993@gmail.com
+ -->
 <launch>
-
     <arg name="model" default="$(find robot4ws_description)/urdf/rover.urdf.xacro"/>
 
     <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model) rocker_differential:=true"/>

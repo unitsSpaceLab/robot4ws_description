@@ -10,6 +10,8 @@ project(robot4ws_description)
 find_package(catkin REQUIRED COMPONENTS
   urdf
   xacro
+  realsense2_description
+  hector_gazebo_plugins
 )
 
 ## System dependencies are found with CMake's conventions

@@ -1,3 +1,9 @@
+<!-- 
+     @author: Matteo Caruso
+     @email: matteo.caruso@phd.units.it
+     @email: matteo.caruso1993@gmail.com
+ -->
+ 
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Archimede">
 	<xacro:arg name="include_kinematics_plugin" default="true"/>
