@@ -1,5 +1,10 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Archimede">
+    <!-- 
+        @author: Stefano Seriani
+        @email: sseriani@units.it
+        @email: serianik@gmail.com
+    -->
 	<xacro:macro name="rover_differential" params="name">
 		
 		<gazebo>
