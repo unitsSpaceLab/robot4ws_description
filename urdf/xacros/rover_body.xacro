@@ -20,6 +20,17 @@
 		<!-- Define world link-->
 		<link name="${name}_base_link"/>
 
+		<!-- Define foot print-->
+		<!-- <link name="${name}_foot_print"/>
+		<joint name="${name}_foot_print_joint" type="fixed">
+			<parent link="${name}_base_link_dummy"/>
+			<child link="${name}_foot_print"/>
+			<origin xyz="0 0 -0.16" rpy="0 0 0"/>
+		</joint> -->
+		<!-- <gazebo reference="${name}_foot_print_joint">
+			<disableFixedJointLumping>true</disableFixedJointLumping> 
+			<preserveFixedJoint>true</preserveFixedJoint>
+		</gazebo> -->
 
 		<!-- Define rover base link-->
 		<link name="${name}_base_link_dummy">
@@ -166,6 +177,10 @@
 			<child link="${name}_imu_link"/>
 			<origin xyz="0 0 0.08" rpy="0 0 0"/>
 		</joint>
+		<!-- <gazebo reference="${name}_imu_joint">
+			<disableFixedJointLumping>true</disableFixedJointLumping> 
+			<preserveFixedJoint>true</preserveFixedJoint>
+		</gazebo>  -->
 
 		<!-- DEFINE HERE THE SCAN LINK -->
 		<link name="${name}_scan_link"/>

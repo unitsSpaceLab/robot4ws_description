@@ -19,12 +19,11 @@
         </gazebo>
 
 
-        <gazebo>
+        <!-- <gazebo>
             <plugin name="${name}_kinematic_plugin" filename="libarchimede_kinematics_gazebo_ros_simulation_plugin.so"/>
-        </gazebo>
+        </gazebo> -->
         <gazebo>
             <plugin name="${name}_odometry_plugin" filename="libarchimede_odometry_gazebo_plugin.so">
-                <!-- <topics_ns>Archimede<topics_ns/> -->
                 <integrator>Trapezi</integrator>
                 <odomTopicName>Archimede/odom</odomTopicName>
                 <odomQueSize>100</odomQueSize>
@@ -38,13 +37,13 @@
                 <JointStateTopicName>Archimede/JointStateFake</JointStateTopicName>
                 <SensorStateTopicName>Archimede/sensor_state</SensorStateTopicName>
                 <OdomMode>position</OdomMode>
-                <skipFrames>10</skipFrames>
+                <skipFrames>1</skipFrames>
             </plugin>
         </gazebo>
 
 
         <!-- INCLUDE HERE PLUGIN FOR IMU -->
-        <gazebo>
+        <!-- <gazebo>
             <plugin name="imu_plugin" filename="libgazebo_ros_imu.so">
             <alwaysOn>true</alwaysOn>
             <bodyName>${name}_imu_link</bodyName>
@@ -52,7 +51,7 @@
             <topicName>${name}/imu</topicName>
             <serviceName>imu_service</serviceName>
             <gaussianNoise>0.0</gaussianNoise>
-            <updateRate>0</updateRate>
+            <updateRate>100</updateRate>
             <imu>
                 <noise>
                 <type>gaussian</type>
@@ -71,10 +70,53 @@
                 </noise>
             </imu>
             </plugin>
+        </gazebo> -->
+
+
+        <!-- Try with hector gazebo plugin hector_gazebo_ros_imu-->
+
+         <gazebo>
+            <plugin name="${name}_imu_sim" filename="libhector_gazebo_ros_imu.so">
+                <updateRate>100</updateRate>
+                <!-- <robotNamespace></robotNamespace> -->
+                <bodyName>${name}_imu_link</bodyName>
+                <frameId>${name}_imu_link</frameId>
+                <topicName>Archimede/imu</topicName>
+                <accelOffset>0 0 0</accelOffset>
+                <accelDrift>0 0 0</accelDrift>
+                <accelGaussianNoise>0 0 0</accelGaussianNoise>
+                <rateOffset>0 0 0</rateOffset>
+                <rateDrift>0 0 0</rateDrift>
+                <rateGaussianNoise>0 0 0</rateGaussianNoise>
+                <yawOffset>0</yawOffset>
+                <yawDrift>0</yawDrift>
+                <yawGaussianNoise>0</yawGaussianNoise>
+            </plugin>
         </gazebo>
 
 
-        <gazebo>
+        <!-- <gazebo reference="${name}_imu_link">
+            <gravity>true</gravity>
+            <sensor name="imu_sensor" type="imu">
+            <always_on>true</always_on>
+            <update_rate>100</update_rate>
+            <visualize>true</visualize>
+            <topic>__default_topic__</topic>
+            <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+                <topicName>${name}/imu</topicName>
+                <bodyName>${name}_imu_link</bodyName>
+                <updateRateHZ>10.0</updateRateHZ>
+                <gaussianNoise>0.0</gaussianNoise>
+                <xyzOffset>0 0 0</xyzOffset>
+                <rpyOffset>0 0 0</rpyOffset>
+                <frameName>${name}_imu_link</frameName>
+                <initialOrientationAsReference>false</initialOrientationAsReference>
+            </plugin>
+            <pose>0 0 0 0 0 0</pose>
+            </sensor>
+        </gazebo>  -->
+
+        <!-- <gazebo>
             <plugin name="${name}_get_body_pose" filename="libarchimede_get_link_state.so">
                 <saveDir>$(find robot4ws_simulations)/data</saveDir>
                 <linkName>${name}_base_link</linkName>
@@ -91,7 +133,7 @@
                 <readCOG>false</readCOG>
                 <worldMode>false</worldMode>
             </plugin>
-        </gazebo>
+        </gazebo> -->
 
 
 

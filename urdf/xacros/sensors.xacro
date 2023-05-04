@@ -95,7 +95,13 @@
         <!-- <gazebo reference="${name}_realsense_d435i_link">
             <sensor name="${name}_d435i_color" type="camera">
                 <camera name="${name}_d435i">
-                <horizontal_fov>1.2112585008840648</horizontal_fov>
+      <gazebo reference="${name}_imu_link">
+            <sensor type="imu" name="imu">
+            <always_on>true</always_on>
+            <visualize>$(arg visualize_imu)</visualize>
+            </sensor>
+            <material>Gazebo/Grey</material>
+        </gazebo>          <horizontal_fov>1.2112585008840648</horizontal_fov>
                 <image>
                     <width>1920</width>
                     <height>1080</height>
@@ -141,7 +147,13 @@
                 <camera name="${name}_d435i">
                 <horizontal_fov>1.4870205226991688</horizontal_fov>
                 <image>
-                    <width>1280</width>
+                   <gazebo reference="${name}_imu_link">
+            <sensor type="imu" name="imu">
+            <always_on>true</always_on>
+            <visualize>$(arg visualize_imu)</visualize>
+            </sensor>
+            <material>Gazebo/Grey</material>
+        </gazebo> <width>1280</width>
                     <height>720</height>
                     <format>L_INT8</format>
                 </image>
@@ -150,7 +162,13 @@
                     <far>100</far>
                 </clip>
                 <noise>
-                    <type>gaussian</type>
+                   <gazebo reference="${name}_imu_link">
+            <sensor type="imu" name="imu">
+            <always_on>true</always_on>
+            <visualize>$(arg visualize_imu)</visualize>
+            </sensor>
+            <material>Gazebo/Grey</material>
+        </gazebo> <type>gaussian</type>
                     <mean>0.0</mean>
                     <stddev>0.05</stddev>
                 </noise>
@@ -161,7 +179,13 @@
             </sensor>
             <sensor name="${name}_d435i_depth" type="depth">
                 <camera name="${name}_d435i">
-                <horizontal_fov>1.4870205226991688</horizontal_fov>
+      <gazebo reference="${name}_imu_link">
+            <sensor type="imu" name="imu">
+            <always_on>true</always_on>
+            <visualize>$(arg visualize_imu)</visualize>
+            </sensor>
+            <material>Gazebo/Grey</material>
+        </gazebo>          <horizontal_fov>1.4870205226991688</horizontal_fov>
                 <image>
                     <width>1280</width>
                     <height>720</height>
