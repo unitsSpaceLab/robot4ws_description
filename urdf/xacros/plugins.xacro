@@ -19,9 +19,10 @@
         </gazebo>
 
 
-        <!-- <gazebo>
+        <gazebo>
             <plugin name="${name}_kinematic_plugin" filename="libarchimede_kinematics_gazebo_ros_simulation_plugin.so"/>
-        </gazebo> -->
+        </gazebo>
+        
         <gazebo>
             <plugin name="${name}_odometry_plugin" filename="libarchimede_odometry_gazebo_plugin.so">
                 <integrator>Trapezi</integrator>
