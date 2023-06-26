@@ -149,6 +149,13 @@
             </plugin>
         </gazebo>
 
+        <gazebo>
+            <plugin name="{name}_apply_force" filename="libarchimede_force_plugin.so">
+                <link_name>Archimede_bl_wheel_link</link_name>
+                <Force>1000 0 0</Force>
+            </plugin>
+        </gazebo>
+
 
     
 	</xacro:macro>
