@@ -8,7 +8,7 @@
 	<xacro:arg name="include_kinematics_plugin" default="true"/>
     <xacro:arg name="realsense_point_could" default="false"/>
     <!-- <xacro:arg name="" -->
-	<xacro:macro name="rover_plugins" params="name">
+	<xacro:macro name="rover_plugins" params="name include_terrain_slip_plugin">
 
         <gazebo>
             <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
@@ -141,7 +141,7 @@
 
 
         <gazebo>
-            <plugin name="${name}_magetic_sensor" filename="libhector_gazebo_ros_magnetic.so">
+            <plugin name="${name}_magnetic_sensor" filename="libhector_gazebo_ros_magnetic.so">
                 <updateRate>100</updateRate>
                 <robotNamespace>Archimede</robotNamespace>
                 <bodyName>${name}_imu_link</bodyName>
@@ -149,6 +149,19 @@
             </plugin>
         </gazebo>
 
+
+
+        <xacro:if value="${include_terrain_slip_plugin}">
+            <gazebo>
+                <plugin name="archimede_apply_artificial_slip" filename="libarchimede_apply_artificial_slip.so">
+                    <apply_mode>force</apply_mode> <!-- force / velocity-->
+                    <pid_kp>2200</pid_kp>
+                    <pid_ki>2200000</pid_ki>
+                    <pid_kd>0</pid_kd>
+                    <pid_i_max>25</pid_i_max>
+                </plugin>
+            </gazebo>
+        </xacro:if>
     
 	</xacro:macro>
 </robot>
