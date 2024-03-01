@@ -12,6 +12,7 @@
 	<xacro:arg name="show_cameras" default="true"/>
 	<xacro:arg name="show_laser_scan" default="true"/>
 	<xacro:arg name="rocker_differential" default="false"/>
+	<xacro:arg name="include_terrain_slip_plugin" default="true"/>
 
 
 
@@ -75,7 +76,7 @@
 
 	<!-- Include Rover Plugins -->
 	<xacro:if value="$(arg include_plugins)">
-		<xacro:rover_plugins name="Archimede"/>
+		<xacro:rover_plugins name="Archimede" include_terrain_slip_plugin="$(arg include_terrain_slip_plugin)"/>
 	</xacro:if>
 
 
@@ -85,4 +86,3 @@
 
 
 </robot>
-
