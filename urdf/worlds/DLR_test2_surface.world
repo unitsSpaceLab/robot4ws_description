@@ -112,7 +112,7 @@
           <pose frame=''>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>/home/ros/model_editor_models/DLR_test2_surface/simplify_DLR_mesh2.stl</uri>
+              <uri>/home/ros/catkin_ws/src/archimede_rover/robot4ws_description/meshes/simplify_DLR_mesh2.stl</uri>
               <scale>1 1 1</scale>
             </mesh>
           </geometry>
@@ -135,7 +135,7 @@
           <pose frame=''>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>/home/ros/model_editor_models/DLR_test2_surface/simplify_DLR_mesh2.stl</uri>
+              <uri>/home/ros/catkin_ws/src/archimede_rover/robot4ws_description/meshes/simplify_DLR_mesh2.stl</uri>
               <scale>1 1 1</scale>
             </mesh>
           </geometry>
