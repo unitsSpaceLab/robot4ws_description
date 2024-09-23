@@ -159,6 +159,7 @@
                     <pid_ki>2200000</pid_ki>
                     <pid_kd>0</pid_kd>
                     <pid_i_max>25</pid_i_max>
+                    <last_input_vels_to_save>10</last_input_vels_to_save>
                 </plugin>
             </gazebo>
         </xacro:if>
