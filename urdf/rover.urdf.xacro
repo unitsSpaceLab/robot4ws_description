@@ -21,6 +21,10 @@
 	<xacro:arg name="publish_pointcloud" default="true"/>
 	<xacro:arg name="add_plug" default="false"/>
 
+	<!-- velodyne specific parameters -->
+	<xacro:arg name="add_velodyneHDL32E" default="false"/>
+	<xacro:arg name="lidar_organize_cloud" default="false"/>
+
 
 	<xacro:include filename="$(find robot4ws_description)/urdf/xacros/rover_body.xacro"/>
 	<xacro:include filename="$(find robot4ws_description)/urdf/xacros/rover_differential.xacro"/>
@@ -79,10 +83,13 @@
 		<xacro:rover_plugins name="Archimede" include_terrain_slip_plugin="$(arg include_terrain_slip_plugin)"/>
 	</xacro:if>
 
-
-
-
-
+	<!-- Include velodyne lidar -->
+	<xacro:if value="$(arg add_velodyneHDL32E)">
+		<xacro:include filename="$(find velodyne_description)/urdf/HDL-32E.urdf.xacro"/>
+		<xacro:HDL-32E parent="Archimede_base_link_dummy" name="Archimede_velodyne" topic="/Archimede/velodyne_points" organize_cloud="$(arg lidar_organize_cloud)" hz="10" samples="360">
+			<origin xyz="0.09 0 0.2" rpy="0 0 0" />
+		</xacro:HDL-32E>
+	</xacro:if>
 
 
 </robot>
