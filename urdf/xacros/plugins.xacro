@@ -8,7 +8,7 @@
 	<xacro:arg name="include_kinematics_plugin" default="true"/>
     <xacro:arg name="realsense_point_could" default="false"/>
     <!-- <xacro:arg name="" -->
-	<xacro:macro name="rover_plugins" params="name include_terrain_slip_plugin">
+	<xacro:macro name="rover_plugins" params="name include_terrain_slip_plugin include_wheels_terramechanic_model">
 
         <gazebo>
             <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
@@ -163,6 +163,28 @@
                 </plugin>
             </gazebo>
         </xacro:if>
-    
+
+        <xacro:if value="${include_wheels_terramechanic_model}">
+            <xacro:property name="use_compact_model" value="true" /> <!-- true/false -->
+            <gazebo>
+                <plugin name="${name}_br_terramech_model" filename="libapply_single_wheel_terramechanic_model.so">
+                    <link_name>Archimede_br_wheel_link</link_name>
+                    <use_compact_model>${use_compact_model}</use_compact_model>
+                </plugin>
+                <plugin name="${name}_fr_terramech_model" filename="libapply_single_wheel_terramechanic_model.so">
+                    <link_name>Archimede_fr_wheel_link</link_name>
+                    <use_compact_model>${use_compact_model}</use_compact_model>
+                </plugin>
+                <plugin name="${name}_bl_terramech_model" filename="libapply_single_wheel_terramechanic_model.so">
+                    <link_name>Archimede_bl_wheel_link</link_name>
+                    <use_compact_model>${use_compact_model}</use_compact_model>
+                </plugin>
+                <plugin name="${name}_fl_terramech_model" filename="libapply_single_wheel_terramechanic_model.so">
+                    <link_name>Archimede_fl_wheel_link</link_name>
+                    <use_compact_model>${use_compact_model}</use_compact_model>
+                </plugin>
+            </gazebo>
+        </xacro:if>
+
 	</xacro:macro>
 </robot>
