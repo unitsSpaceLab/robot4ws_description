@@ -165,9 +165,10 @@
         </xacro:if>
 
         <xacro:if value="${include_wheels_terramechanic_model}">
-            <xacro:property name="use_compact_model" value="true" /> <!-- true/false -->
+            <xacro:property name="use_compact_model" value="false" /> <!-- true/false -->
             <gazebo>
-                <plugin name="${name}_br_terramech_model" filename="libapply_single_wheel_terramechanic_model.so">
+                <!-- Single Terramechanics Model for Each Wheel -->
+                <!-- <plugin name="${name}_br_terramech_model" filename="libapply_single_wheel_terramechanic_model.so">
                     <link_name>Archimede_br_wheel_link</link_name>
                     <use_compact_model>${use_compact_model}</use_compact_model>
                 </plugin>
@@ -181,6 +182,11 @@
                 </plugin>
                 <plugin name="${name}_fl_terramech_model" filename="libapply_single_wheel_terramechanic_model.so">
                     <link_name>Archimede_fl_wheel_link</link_name>
+                    <use_compact_model>${use_compact_model}</use_compact_model>
+                </plugin> -->
+
+                <!-- Unified Terramechanics Model for All Wheels -->
+                <plugin name="${name}_terramech_model" filename="libapply_all_wheels_terramechanic_model.so">
                     <use_compact_model>${use_compact_model}</use_compact_model>
                 </plugin>
             </gazebo>
