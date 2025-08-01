@@ -59,7 +59,7 @@ drive:
             x: 1
             y: 1
             z: 1
-        filename: "wheel_v2.STL"
+        filename: "wheel_v2.stl"
         origin_mesh:
             position:
                 x: 0
@@ -85,7 +85,7 @@ drive:
     collision:
         active: false
         mesh: false
-        filename: "wheel_v2.STL"
+        filename: "wheel_v2.stl"
 
 
 

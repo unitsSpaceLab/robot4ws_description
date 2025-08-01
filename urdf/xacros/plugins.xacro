@@ -1,196 +1,109 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Archimede">
-    <!-- 
-        @author: Matteo Caruso
-        @email: matteo.caruso@phd.units.it
-        @email: matteo.caruso1993@gmail.com
-    -->
-	<xacro:arg name="include_kinematics_plugin" default="true"/>
-    <xacro:arg name="realsense_point_could" default="false"/>
-    <!-- <xacro:arg name="" -->
-	<xacro:macro name="rover_plugins" params="name include_terrain_slip_plugin include_wheels_terramechanic_model">
-
-        <gazebo>
-            <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-                <robotNamespace>/Archimede</robotNamespace>
-                <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
-                <legacyModeNS>true</legacyModeNS>
-            </plugin>
-        </gazebo>
-
-
-        <gazebo>
-            <plugin name="${name}_kinematic_plugin" filename="libarchimede_kinematics_gazebo_ros_simulation_plugin.so"/>
-        </gazebo>
+    <xacro:macro name="rover_plugins" params="name include_terrain_slip_plugin include_wheels_terramechanic_model">
         
+        <!-- Load wheel configuration from YAML, used in diff-drive/ackermann plugin - REMOVE -->
+        <!-- <xacro:property name="wheel_config_file" value="$(find robot4ws_description)/urdf/config/wheel_hub.yaml"/>
+        <xacro:property name="wheel_config" value="${xacro.load_yaml(wheel_config_file)}"/> -->
+
+
         <gazebo>
-            <plugin name="${name}_odometry_plugin" filename="libarchimede_odometry_gazebo_plugin.so">
-                <integrator>Trapezi</integrator>
-                <odomTopicName>Archimede/odom</odomTopicName>
-                <odomQueSize>100</odomQueSize>
-                <odomFrameName>odom</odomFrameName>
-                <odomPublishRate>10</odomPublishRate>
-                <baseLinkFrameName>Archimede_foot_print</baseLinkFrameName>
-                <useFakePublishers>true</useFakePublishers>
-                <motorCurrentTopicName>Archimede/motor_current</motorCurrentTopicName>
-                <motorTemperatureTopicName>Archimede/motor_temperature</motorTemperatureTopicName>
-                <soundTopicName>Archimede/sound</soundTopicName>
-                <JointStateTopicName>Archimede/JointStateFake</JointStateTopicName>
-                <SensorStateTopicName>Archimede/sensor_state</SensorStateTopicName>
-                <OdomMode>position</OdomMode>
-                <skipFrames>1</skipFrames>
-            </plugin>
-        </gazebo>
-
-
-        <!-- INCLUDE HERE PLUGIN FOR IMU -->
-        <!-- <gazebo>
-            <plugin name="imu_plugin" filename="libgazebo_ros_imu.so">
-            <alwaysOn>true</alwaysOn>
-            <bodyName>${name}_imu_link</bodyName>
-            <frameName>${name}_imu_link</frameName>
-            <topicName>${name}/imu</topicName>
-            <serviceName>imu_service</serviceName>
-            <gaussianNoise>0.0</gaussianNoise>
-            <updateRate>100</updateRate>
-            <imu>
-                <noise>
-                <type>gaussian</type>
-                <rate>
-                    <mean>0.0</mean>
-                    <stddev>2e-4</stddev>
-                    <bias_mean>0.0000075</bias_mean>
-                    <bias_stddev>0.0000008</bias_stddev>
-                </rate>
-                <accel>
-                    <mean>0.0</mean>
-                    <stddev>1.7e-2</stddev>
-                    <bias_mean>0.1</bias_mean>
-                    <bias_stddev>0.001</bias_stddev>
-                </accel>
-                </noise>
-            </imu>
-            </plugin>
-        </gazebo> -->
-
-
-        <!-- Try with hector gazebo plugin hector_gazebo_ros_imu-->
-
-         <gazebo>
-            <plugin name="${name}_imu_sim" filename="libhector_gazebo_ros_imu.so">
-                <updateRate>100</updateRate>
-                <!-- <robotNamespace></robotNamespace> -->
-                <bodyName>${name}_imu_link</bodyName>
-                <frameId>${name}_imu_link</frameId>
-                <topicName>Archimede/imu</topicName>
-                <accelOffset>0 0 0</accelOffset>
-                <accelDrift>0 0 0</accelDrift>
-                <accelGaussianNoise>0 0 0</accelGaussianNoise>
-                <rateOffset>0 0 0</rateOffset>
-                <rateDrift>0 0 0</rateDrift>
-                <rateGaussianNoise>0 0 0</rateGaussianNoise>
-                <yawOffset>0</yawOffset>
-                <yawDrift>0</yawDrift>
-                <yawGaussianNoise>0</yawGaussianNoise>
-            </plugin>
-        </gazebo>
-
-
-        <!-- <gazebo reference="${name}_imu_link">
-            <gravity>true</gravity>
-            <sensor name="imu_sensor" type="imu">
-            <always_on>true</always_on>
-            <update_rate>100</update_rate>
-            <visualize>true</visualize>
-            <topic>__default_topic__</topic>
-            <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
-                <topicName>${name}/imu</topicName>
-                <bodyName>${name}_imu_link</bodyName>
-                <updateRateHZ>10.0</updateRateHZ>
-                <gaussianNoise>0.0</gaussianNoise>
-                <xyzOffset>0 0 0</xyzOffset>
-                <rpyOffset>0 0 0</rpyOffset>
-                <frameName>${name}_imu_link</frameName>
-                <initialOrientationAsReference>false</initialOrientationAsReference>
-            </plugin>
-            <pose>0 0 0 0 0 0</pose>
-            </sensor>
-        </gazebo>  -->
-
-        <!-- <gazebo>
-            <plugin name="${name}_get_body_pose" filename="libarchimede_get_link_state.so">
-                <saveDir>$(find robot4ws_simulations)/data</saveDir>
-                <linkName>${name}_base_link</linkName>
-                <readCOG>false</readCOG>
-                <worldMode>true</worldMode>
+            <plugin filename="gz-sim-joint-state-publisher-system" 
+                    name="gz::sim::systems::JointStatePublisher">
+                <topic>${name}/joint_states</topic>
             </plugin>
         </gazebo>
 
 
         <gazebo>
-            <plugin name="${name}_get_fr_steer_hub_pose" filename="libarchimede_get_link_state.so">
-                <saveDir>$(find robot4ws_simulations)/data</saveDir>
-                <linkName>${name}_fr_steer_link</linkName>
-                <readCOG>false</readCOG>
-                <worldMode>false</worldMode>
-            </plugin>
-        </gazebo> -->
-
-
-
-
-
-        <gazebo>
-            <plugin name="${name}_magnetic_sensor" filename="libhector_gazebo_ros_magnetic.so">
-                <updateRate>100</updateRate>
-                <robotNamespace>Archimede</robotNamespace>
-                <bodyName>${name}_imu_link</bodyName>
-                <topicName>magnetic_field</topicName>
+            <plugin filename="gz-sim-pose-publisher-system"
+                    name="gz::sim::systems::PosePublisher">
+                <publish_link_pose>true</publish_link_pose>
+                <use_pose_vector_msg>true</use_pose_vector_msg>
+                <static_publisher>true</static_publisher>
+                <static_update_frequency>10</static_update_frequency>
             </plugin>
         </gazebo>
 
 
+        <gazebo>
+            <plugin name="my_namespace::JointsControllerPlugin" filename="libJointsControllerPlugin.so">
+                <topic>${name}/cmd_vel_motors</topic>
+                <config_path>/home/s250877/archimede_ros2_ws/src/archimede_rover/robot4ws_gazebo_plugins/config/joints_control_config.yaml</config_path>
+            </plugin>
 
-        <xacro:if value="${include_terrain_slip_plugin}">
-            <gazebo>
-                <plugin name="archimede_apply_artificial_slip" filename="libarchimede_apply_artificial_slip.so">
-                    <apply_mode>force</apply_mode> <!-- force / velocity-->
-                    <pid_kp>2200</pid_kp>
-                    <pid_ki>2200000</pid_ki>
-                    <pid_kd>0</pid_kd>
-                    <pid_i_max>25</pid_i_max>
-                    <last_input_vels_to_save>10</last_input_vels_to_save>
-                </plugin>
-            </gazebo>
-        </xacro:if>
+            <!-- <plugin filename="gz-sim-diff-drive-system"
+                    name="gz::sim::systems::DiffDrive">
+                <left_joint>${name}_fl_drive_joint</left_joint>
+                <left_joint>${name}_bl_drive_joint</left_joint>
+                <right_joint>${name}_fr_drive_joint</right_joint>
+                <right_joint>${name}_br_drive_joint</right_joint>
 
-        <xacro:if value="${include_wheels_terramechanic_model}">
-            <xacro:property name="use_compact_model" value="false" /> <!-- true/false -->
-            <gazebo>
-                <!-- Single Terramechanics Model for Each Wheel -->
-                <!-- <plugin name="${name}_br_terramech_model" filename="libapply_single_wheel_terramechanic_model.so">
-                    <link_name>Archimede_br_wheel_link</link_name>
-                    <use_compact_model>${use_compact_model}</use_compact_model>
-                </plugin>
-                <plugin name="${name}_fr_terramech_model" filename="libapply_single_wheel_terramechanic_model.so">
-                    <link_name>Archimede_fr_wheel_link</link_name>
-                    <use_compact_model>${use_compact_model}</use_compact_model>
-                </plugin>
-                <plugin name="${name}_bl_terramech_model" filename="libapply_single_wheel_terramechanic_model.so">
-                    <link_name>Archimede_bl_wheel_link</link_name>
-                    <use_compact_model>${use_compact_model}</use_compact_model>
-                </plugin>
-                <plugin name="${name}_fl_terramech_model" filename="libapply_single_wheel_terramechanic_model.so">
-                    <link_name>Archimede_fl_wheel_link</link_name>
-                    <use_compact_model>${use_compact_model}</use_compact_model>
-                </plugin> -->
+                <wheel_separation>${2 * wheel_config['steer_joint']['origin']['position']['y']}</wheel_separation>
+                <wheel_radius>${wheel_config['drive']['geom']['radius']}</wheel_radius>
 
-                <!-- Unified Terramechanics Model for All Wheels -->
-                <plugin name="${name}_terramech_model" filename="libapply_all_wheels_terramechanic_model.so">
-                    <use_compact_model>${use_compact_model}</use_compact_model>
-                </plugin>
-            </gazebo>
-        </xacro:if>
+                <topic>cmd_vel</topic>
+                <odom_topic>odom</odom_topic>
+                <frame_id>odom</frame_id>
+                <child_frame_id>${name}_base_link</child_frame_id>
+            </plugin> -->
 
-	</xacro:macro>
+            <!-- <plugin filename="gz-sim-ackermann-steering-system"
+                    name="gz::sim::systems::AckermannSteering">
+                <left_joint>${name}_fl_drive_joint</left_joint>
+                <left_joint>${name}_bl_drive_joint</left_joint>
+                <right_joint>${name}_fr_drive_joint</right_joint>
+                <right_joint>${name}_br_drive_joint</right_joint>
+                <left_steering_joint>${name}_fl_steer_joint</left_steering_joint>
+                <right_steering_joint>${name}_fr_steer_joint</right_steering_joint>
+
+                <wheel_base>${2 * wheel_config['steer_joint']['origin']['position']['x']}</wheel_base>
+                <wheel_separation>${2 * wheel_config['steer_joint']['origin']['position']['y']}</wheel_separation>
+                <wheel_radius>${wheel_config['drive']['geom']['radius']}</wheel_radius>
+
+                <steering_limit>0.5</steering_limit>
+                <min_velocity>-1</min_velocity>
+                <max_velocity>1</max_velocity>
+                <min_acceleration>-3</min_acceleration>
+                <max_acceleration>3</max_acceleration>
+
+                <topic>cmd_vel</topic>
+                <odom_topic>odom</odom_topic>
+                <frame_id>odom</frame_id>
+                <child_frame_id>${name}_base_link</child_frame_id>
+
+                <publish_odom>false</publish_odom>
+                <publish_tf>false</publish_tf>
+            </plugin> -->
+        </gazebo>
+
+        <gazebo>
+            <plugin filename="gz-sim-odometry-publisher-system" name="gz::sim::systems::OdometryPublisher">
+                <odom_frame>${name}_odom</odom_frame>
+                <robot_base_frame>${name}_base_link</robot_base_frame>
+                <odom_publish_frequency>10</odom_publish_frequency>
+                <odom_topic>${name}/odom</odom_topic>
+                <odom_covariance_topic>${name}/odom_with_covariance</odom_covariance_topic>
+                <tf_topic>tf</tf_topic>
+                <dimensions>2</dimensions>
+                <xyz_offset>0 0 0</xyz_offset>
+                <rpy_offset>0 0 0</rpy_offset>
+                <gaussian_noise>0</gaussian_noise>
+            </plugin>
+        </gazebo>
+
+
+        <!-- sensors remains: lidar, custom odometry -->
+        <gazebo>
+            <plugin filename="gz-sim-imu-system" name="gz::sim::systems::Imu">
+            </plugin>
+        </gazebo>
+
+        <gazebo>
+            <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+                <render_engine>ogre2</render_engine>
+            </plugin>
+        </gazebo>
+
+    </xacro:macro>
 </robot>

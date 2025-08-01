@@ -1,209 +1,176 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Archimede">
     <!-- 
-        @author: Matteo Caruso
-        @email: matteo.caruso@phd.units.it
-        @email: matteo.caruso1993@gmail.com
+        @author: Khalid Bourr
+        @email: khalid.bourr@gmail.com
+
+        @author: Simone Cottiga 
+        @email: simone.cottiga@phd.units.it
+        @email: smcotti@gmail.com
     -->
     <xacro:arg name="visualize_imu" default="true"/>
     <xacro:arg name="visualize_scan" default="true"/>
-    <xacro:arg name="visualize_pi_camera" default="true"/>
+    <xacro:arg name="visualize_lidar" default="true"/>
 
-	<xacro:macro name="rover_sensors" params="name">
+	<xacro:macro name="rover_sensors" params="name add_velodyneHDL32E:=false">
+    <!-- NOTE: the gz_frame_id block of each sensor will give a gazebo warning like this:
+        [gz-2] Warning [Utils.cc:132] [/sdf/model[@name="Archimede"]/link[@name="Archimede_base_link"]/sensor[@name="rs_camera"]/gz_frame_id:<data-string>:L107]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+        
+        This is normal because the block is not a standard sdf element, but it is read instead by the sensors plugins in order to set 
+        the correct frame_id in the gz msg (and ros msg through the bridge)
+    -->
+
+        <!-- IMU -->
         <gazebo reference="${name}_imu_link">
-            <sensor type="imu" name="imu">
-            <always_on>true</always_on>
-            <visualize>$(arg visualize_imu)</visualize>
+            <sensor name="imu" type="imu">
+                <pose>0 0 0 0 0 0</pose>
+                <always_on>true</always_on>
+                <visualize>$(arg visualize_imu)</visualize>
+                <update_rate>50</update_rate>
+                <topic>${name}/imu</topic>
+                <gz_frame_id>${name}_imu_link</gz_frame_id>
             </sensor>
             <material>Gazebo/Grey</material>
         </gazebo>
 
-
-
-
-
+        <!-- LASER SCAN -->
         <gazebo reference="${name}_scan_link">
             <material>Gazebo/FlatBlack</material>
-            <sensor type="ray" name="lds_lfcd_sensor">
-            <pose>0 0 0 0 0 0</pose>
-            <visualize>$(arg visualize_scan)</visualize>
-            <update_rate>5</update_rate>
-            <ray>
-                <scan>
-                <horizontal>
-                    <samples>360</samples>
-                    <resolution>1</resolution>
-                    <min_angle>0.0</min_angle>
-                    <max_angle>6.28319</max_angle>
-                </horizontal>
-                </scan>
-                <range>
-                <min>1</min>
-                <max>5</max>
-                <resolution>0.015</resolution>
-                </range>
-                <noise>
-                <type>gaussian</type>
-                <mean>0.0</mean>
-                <stddev>0.01</stddev>
-                </noise>
-            </ray>
-            <plugin name="gazebo_ros_lds_lfcd_controller" filename="libgazebo_ros_laser.so">
-                <topicName>${name}/scan</topicName>
-                <frameName>${name}_scan_link</frameName>
-            </plugin>
+            <sensor name="lds_lfcd_sensor" type="gpu_lidar">
+                <pose>0 0 0 0 0 0</pose>
+                <visualize>$(arg visualize_scan)</visualize>
+                <update_rate>10</update_rate>
+                <gz_frame_id>${name}_scan_link</gz_frame_id>
+                <lidar>
+                    <scan>
+                        <horizontal>
+                            <samples>360</samples>
+                            <resolution>1</resolution>
+                            <min_angle>0.0</min_angle>
+                            <max_angle>6.28319</max_angle>
+                        </horizontal>
+                        <vertical>
+                            <samples>1</samples>
+                            <resolution>1</resolution>
+                            <min_angle>0</min_angle>
+                            <max_angle>0</max_angle>
+                        </vertical>
+                    </scan>
+                    <range>
+                        <min>0.1</min>
+                        <max>5</max>
+                        <resolution>0.015</resolution>
+                    </range>
+                    <noise>
+                        <type>gaussian</type>
+                        <mean>0.0</mean>
+                        <stddev>0.01</stddev>
+                    </noise>
+                </lidar>
+                <topic>${name}/scan</topic>
             </sensor>
         </gazebo>
 
-        <gazebo reference="${name}_pi_camera_link">
-            <sensor type="camera" name="${name}_raspi_camera">
-            <always_on>true</always_on>
-            <visualize>$(arg visualize_pi_camera)</visualize>
-            <camera>
-                <horizontal_fov>1.085595</horizontal_fov>
-                <image>
-                    <width>640</width>
-                    <height>480</height>
-                    <format>R8G8B8</format>
-                </image>
-                <clip>
-                    <near>0.03</near>
-                    <far>100</far>
-                </clip>
-            </camera>
-            <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
-                <alwaysOn>true</alwaysOn>
-                <updateRate>30.0</updateRate>
-                <cameraName>/Archimede/pi_camera</cameraName>
-                <frameName>${name}_pi_camera_color_optical_frame</frameName>
-                <imageTopicName>rgb/image_raw</imageTopicName>
-                <cameraInfoTopicName>rgb/camera_info</cameraInfoTopicName>
-                <hackBaseline>0.07</hackBaseline>
-                <distortionK1>0.0</distortionK1>
-                <distortionK2>0.0</distortionK2>
-                <distortionK3>0.0</distortionK3>
-                <distortionT1>0.0</distortionT1>
-                <distortionT2>0.0</distortionT2>
-            </plugin>
-            </sensor>
-        </gazebo>
-
-
-
-
-
-        <!-- <gazebo reference="${name}_realsense_d435i_link">
-            <sensor name="${name}_d435i_color" type="camera">
-                <camera name="${name}_d435i">
-      <gazebo reference="${name}_imu_link">
-            <sensor type="imu" name="imu">
-            <always_on>true</always_on>
-            <visualize>$(arg visualize_imu)</visualize>
-            </sensor>
-            <material>Gazebo/Grey</material>
-        </gazebo>          <horizontal_fov>1.2112585008840648</horizontal_fov>
-                <image>
-                    <width>1920</width>
-                    <height>1080</height>
-                    <format>RGB_INT8</format>
-                </image>
-                <clip>
-                    <near>0.1</near>
-                    <far>100</far>
-                </clip>
-                <noise>
-                    <type>gaussian</type>
-                    <mean>0.0</mean>
-                    <stddev>0.007</stddev>
-                </noise>
-                </camera>
+        <!-- RGBD CAMERA -->
+        <gazebo reference="rs_d435i_link">
+            <sensor name="rs_camera" type="rgbd_camera">
+                <pose>0 0 0 0 0 0</pose>
                 <always_on>1</always_on>
                 <update_rate>30</update_rate>
-                <visualize>1</visualize>
-            </sensor>
-            <sensor name="${name}_d435i_infrared_1" type="camera">
-                <camera name="${name}_d435i">
-                <horizontal_fov>1.4870205226991688</horizontal_fov>
-                <image>
-                    <width>1280</width>
-                    <height>720</height>
-                    <format>L_INT8</format>
-                </image>
-                <clip>
-                    <near>0.1</near>
-                    <far>100</far>
-                </clip>
-                <noise>
-                    <type>gaussian</type>
-                    <mean>0.0</mean>
-                    <stddev>0.05</stddev>
-                </noise>
+                <gz_frame_id>rs_d435i_link</gz_frame_id>
+                <camera name="rs_camera">
+                    <horizontal_fov>1.50098</horizontal_fov>
+                    <lens>
+                        <intrinsics>
+                            <!-- fx = fy = width / ( 2 * tan (hfov / 2 ) ) -->
+                            <fx>343.159</fx>
+                            <fy>343.159</fy>
+                            <!-- cx = ( width - 1 ) / 2 -->
+                            <cx>319.5</cx>
+                            <!-- cy = ( height - 1 ) / 2 -->
+                            <cy>179.5</cy>
+                            <s>0</s>
+                        </intrinsics>
+                    </lens>
+                    <distortion>
+                        <k1>0.0</k1>
+                        <k2>0.0</k2>
+                        <k3>0.0</k3>
+                        <p1>0.0</p1>
+                        <p2>0.0</p2>
+                        <center>0.5 0.5</center>
+                    </distortion>
+                    <image>
+                        <width>640</width>
+                        <height>360</height>
+                        <format>R8G8B8</format>
+                    </image>
+                    <clip>
+                        <near>0.01</near>
+                        <far>300</far>
+                    </clip>
+                    <depth_camera>
+                        <clip>
+                        <near>0.1</near>
+                        <far>10</far>
+                        </clip>
+                    </depth_camera>
+                    <noise>
+                        <type>gaussian</type>
+                        <mean>0</mean>
+                        <stddev>0.007</stddev>
+                    </noise>
                 </camera>
-                <always_on>1</always_on>
-                <update_rate>90</update_rate>
-                <visualize>0</visualize>
             </sensor>
-            <sensor name="${name}_d435i_infrared_2" type="camera">
-                <camera name="${name}_d435i">
-                <horizontal_fov>1.4870205226991688</horizontal_fov>
-                <image>
-                   <gazebo reference="${name}_imu_link">
-            <sensor type="imu" name="imu">
-            <always_on>true</always_on>
-            <visualize>$(arg visualize_imu)</visualize>
-            </sensor>
-            <material>Gazebo/Grey</material>
-        </gazebo> <width>1280</width>
-                    <height>720</height>
-                    <format>L_INT8</format>
-                </image>
-                <clip>
-                    <near>0.1</near>
-                    <far>100</far>
-                </clip>
-                <noise>
-                   <gazebo reference="${name}_imu_link">
-            <sensor type="imu" name="imu">
-            <always_on>true</always_on>
-            <visualize>$(arg visualize_imu)</visualize>
-            </sensor>
-            <material>Gazebo/Grey</material>
-        </gazebo> <type>gaussian</type>
-                    <mean>0.0</mean>
-                    <stddev>0.05</stddev>
-                </noise>
-                </camera>
-                <always_on>1</always_on>
-                <update_rate>90</update_rate>
-                <visualize>0</visualize>
-            </sensor>
-            <sensor name="${name}_d435i_depth" type="depth">
-                <camera name="${name}_d435i">
-      <gazebo reference="${name}_imu_link">
-            <sensor type="imu" name="imu">
-            <always_on>true</always_on>
-            <visualize>$(arg visualize_imu)</visualize>
-            </sensor>
-            <material>Gazebo/Grey</material>
-        </gazebo>          <horizontal_fov>1.4870205226991688</horizontal_fov>
-                <image>
-                    <width>1280</width>
-                    <height>720</height>
-                </image>
-                <clip>
-                    <near>0.1</near>
-                    <far>100</far>
-                </clip>
-                <noise>
-                    <type>gaussian</type>
-                    <mean>0.0</mean>
-                    <stddev>0.100</stddev>
-                </noise>
-                </camera>
-                <always_on>1</always_on>
-                <update_rate>90</update_rate>
-                <visualize>0</visualize>
-            </sensor>
-        </gazebo> -->
+        </gazebo>
+
+        <!-- OPTIONAL 3D LIDAR -->
+        <xacro:if value="$(arg add_velodyneHDL32E)">
+            <!-- LINK / JOINT -->
+            <link name="${name}_velodyne_link"/>
+            <joint name="${name}_velodyne_joint" type="fixed">
+                <parent link="${name}_base_link_dummy"/>
+                <child link="${name}_velodyne_link"/>
+                <origin xyz="0.09 0 0.3" rpy="0 0 0"/>
+            </joint>
+            <!-- SENSOR -->
+            <gazebo reference="${name}_velodyne_link">
+                <material>Gazebo/FlatBlack</material>
+                <sensor name="velodyne" type="gpu_lidar">
+                    <pose>0 0 0 0 0 0</pose>
+                    <visualize>$(arg visualize_lidar)</visualize>
+                    <update_rate>5</update_rate>
+                    <gz_frame_id>${name}_velodyne_link</gz_frame_id>
+                    <lidar>
+                        <scan>
+                            <horizontal>
+                                <samples>360</samples>
+                                <resolution>1</resolution>
+                                <min_angle>0.0</min_angle>
+                                <max_angle>6.28319</max_angle>
+                            </horizontal>
+                            <vertical>
+                                <samples>32</samples>
+                                <resolution>1</resolution>
+                                <min_angle>-0.5236</min_angle>
+                                <max_angle>0.1745</max_angle>
+                            </vertical>
+                        </scan>
+                        <range>
+                            <min>1</min>
+                            <max>100</max>
+                            <resolution>0.02</resolution>
+                        </range>
+                        <noise>
+                            <type>gaussian</type>
+                            <mean>0.0</mean>
+                            <stddev>0.01</stddev>
+                        </noise>
+                    </lidar>
+                    <topic>${name}/velodyne</topic>
+                </sensor>
+            </gazebo>
+        </xacro:if>
+
     </xacro:macro>
 </robot>

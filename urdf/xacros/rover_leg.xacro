@@ -7,7 +7,7 @@
 	-->
 	<xacro:macro name="rover_leg" params="name reflect">
 		<xacro:property name="filename" value="$(find robot4ws_description)/urdf/config/leg.yaml"/>
-		<xacro:property name="body_config" value="${load_yaml (filename)}"/>
+		<xacro:property name="body_config" value="${xacro.load_yaml(filename)}"/>
 
 		<!-- Manage reflection -->
 		<xacro:if value="${reflect==1}">

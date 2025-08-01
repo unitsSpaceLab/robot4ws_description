@@ -1,6 +1,49 @@
 # robot4ws_description
+The ***robot4ws_description*** package provides the description for the Archimede rover.
 
-## Create new body
+This comprehend a series of *.xacro* files with all that is needed for the visual and physical representation of the rover in the ***Gazebo Sim Armonic*** simulator, including sensors and plugins.
+
+Before launching gazebo, in order to make it find the *.stl* files stored in this package, run
+```
+export GZ_SIM_RESOURCE_PATH=$GZ_SIM_RESOURCE_PATH:$(ros2 pkg prefix robot4ws_description)/share
+```
+from the terminal, or add it to your *~/.bashrc* file.
+
+Same in order to use the plugins from the *robot4ws_gazebo_plugins* package:
+```
+export GZ_SIM_SYSTEM_PLUGIN_PATH=path/to/your/workspace/install/robot4ws_gazebo_plugins/lib
+```
+
+## Dependencies
+* realsense2 camera packages:
+    ```
+    sudo apt install ros-humble-realsense2-camera
+    sudo apt install ros-humble-realsense2-camera-msgs
+    sudo apt install ros-humble-realsense2-description
+    ```
+
+
+## Installation
+change <ros2_ws> with name of the ROS2 workspace
+```
+cd ~/<ros2_ws>/src
+git clone -b ros2_humble https://github.com/unitsSpaceLab/robot4ws_description.git
+cd ..
+colcon build    # or: colcon build --packages-select robot4ws_description
+```
+
+
+## Structure of the package *(main points)*
+* ***urdf/rover.urdf.xacro***: main robot description file, this one calls all the others.
+* ***launch***: launch files for test purpose.
+* ***config/bridge_config.yaml***: configuration file for the ros_gz_bridge node. (This might be moved to the *robot4ws_simulation* package in the future).
+
+
+## TO DO
+* update rocker-differential 
+
+
+## Create new body *(left here from ros1 version)*
 Duplicate one of the existing body xacro file in ```/xacros/``` (e.g. ```rover_body.xacro```).
 Duplicate the corresponding yaml file in ```/urdf/config/``` (e.g. ```body.yaml```).
 ### xacro configuration
@@ -73,6 +116,3 @@ joint:
             pitch: 0
             yaw: 0
 ```
-
-## Dependencies
-* to-do

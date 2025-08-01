@@ -10,12 +10,12 @@
 		<xacro:if value="${has_differential}">
 			<xacro:property name="filename" value="$(find robot4ws_description)/urdf/config/body_only.yaml"/>
 			<xacro:property name="filenameTiltPlate" value="$(find robot4ws_description)/urdf/config/tilt_plate.yaml"/>
-			<xacro:property name="body_config_tiltPlate" value="${load_yaml (filenameTiltPlate)}"/>
+			<xacro:property name="body_config_tiltPlate" value="${xacro.load_yaml(filenameTiltPlate)}"/>
 		</xacro:if>
 		<xacro:unless value="${has_differential}">
 			<xacro:property name="filename" value="$(find robot4ws_description)/urdf/config/body.yaml"/>
 		</xacro:unless>
-		<xacro:property name="body_config" value="${load_yaml (filename)}"/>
+		<xacro:property name="body_config" value="${xacro.load_yaml(filename)}"/>
 
 		<!-- Define world link-->
 		<link name="${name}_base_link"/>
@@ -177,10 +177,6 @@
 			<child link="${name}_imu_link"/>
 			<origin xyz="0 0 0.08" rpy="0 0 0"/>
 		</joint>
-		<!-- <gazebo reference="${name}_imu_joint">
-			<disableFixedJointLumping>true</disableFixedJointLumping> 
-			<preserveFixedJoint>true</preserveFixedJoint>
-		</gazebo>  -->
 
 		<!-- DEFINE HERE THE SCAN LINK -->
 		<link name="${name}_scan_link"/>
@@ -192,7 +188,7 @@
 
 
 		<!-- DEFINE HERE THE RASPBERRY PI CAMERA LINK -->
-		<link name="${name}_pi_camera_link"/>
+		<!-- <link name="${name}_pi_camera_link"/>
 		<joint name="${name}_pi_camera_joint" type="fixed">
 			<parent link="${name}_base_link_dummy"/>
 			<child link="${name}_pi_camera_link"/>
@@ -204,7 +200,7 @@
 			<parent link="${name}_pi_camera_link"/>
 			<child link="${name}_pi_camera_color_optical_frame"/>
 			<origin xyz="0 0 0.005" rpy="0 0 0"/>
-		</joint>
+		</joint> -->
 
 
 

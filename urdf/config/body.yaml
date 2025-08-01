@@ -34,7 +34,7 @@ body:
             x: 1
             y: 1
             z: 1
-        filename: "rover_chassis_v7.STL"
+        filename: "rover_chassis_v7.stl"
         origin_mesh:
             position:
                 x: 0.005
@@ -60,7 +60,7 @@ body:
     collision:
         active: false
         mesh: false
-        filename: "rover_chassis_v7.STL"
+        filename: "rover_chassis_v7.stl"
 
 
 joint:

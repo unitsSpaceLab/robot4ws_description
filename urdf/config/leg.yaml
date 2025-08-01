@@ -34,7 +34,7 @@ body:
             x: 0.001
             y: 0.001
             z: 0.001
-        filename: "rover_leg.STL"
+        filename: "rover_leg.stl"
         origin_mesh:
             position:
                 x: 0
@@ -60,7 +60,7 @@ body:
     collision:
         active: false
         mesh: false
-        filename: "rover_leg.STL"
+        filename: "rover_leg.stl"
 
 
 joint:
