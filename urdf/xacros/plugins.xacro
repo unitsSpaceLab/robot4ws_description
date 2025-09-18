@@ -160,12 +160,31 @@
                     <pid_kd>0</pid_kd>
                     <pid_i_max>25</pid_i_max>
                     <last_input_vels_to_save>10</last_input_vels_to_save>
+                    <topic>ml_velocity_predictions</topic> <!-- topic with ML predictions -->
+                </plugin>
+
+                <plugin name="apply_soil_terrain" filename="libapply_soil_terrain.so">
                 </plugin>
             </gazebo>
         </xacro:if>
 
         <xacro:if value="${include_wheels_terramechanic_model}">
             <xacro:property name="use_compact_model" value="false" /> <!-- true/false -->
+
+            <xacro:if value="${include_terrain_slip_plugin}">
+                <!-- if both plugin are active, the terramechanic one does not interact with gazebo (apply forces, modify frictions, ecc), but
+                    only publishes its results (confrontation purposes) -->
+                <xacro:property name="passive_plugin" value="true" />
+            </xacro:if>
+
+            <xacro:unless value="${include_terrain_slip_plugin}">
+                <xacro:property name="passive_plugin" value="false" />
+                <gazebo>
+                    <plugin name="apply_soil_terrain" filename="libapply_soil_terrain.so">
+                    </plugin>
+                </gazebo>
+            </xacro:unless>
+
             <gazebo>
                 <!-- Single Terramechanics Model for Each Wheel -->
                 <!-- <plugin name="${name}_br_terramech_model" filename="libapply_single_wheel_terramechanic_model.so">
@@ -188,6 +207,7 @@
                 <!-- Unified Terramechanics Model for All Wheels -->
                 <plugin name="${name}_terramech_model" filename="libapply_all_wheels_terramechanic_model.so">
                     <use_compact_model>${use_compact_model}</use_compact_model>
+                    <passive_plugin>${passive_plugin}</passive_plugin>
                 </plugin>
             </gazebo>
         </xacro:if>
