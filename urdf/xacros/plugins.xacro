@@ -29,7 +29,7 @@
         <gazebo>
             <plugin name="my_namespace::JointsControllerPlugin" filename="libJointsControllerPlugin.so">
                 <topic>${name}/cmd_vel_motors</topic>
-                <config_path>/home/s250877/archimede_ros2_ws/src/archimede_rover/robot4ws_gazebo_plugins/config/joints_control_config.yaml</config_path>
+                <config_path>$(find robot4ws_gazebo_plugins)/config/joints_control_config.yaml</config_path>
             </plugin>
 
             <!-- <plugin filename="gz-sim-diff-drive-system"
