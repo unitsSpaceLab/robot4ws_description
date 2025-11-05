@@ -93,7 +93,7 @@
         </gazebo>
 
 
-        <!-- sensors remains: lidar, custom odometry -->
+        <!-- sensors remains: lidar, custom odometry
         <gazebo>
             <plugin filename="gz-sim-imu-system" name="gz::sim::systems::Imu">
             </plugin>
@@ -103,7 +103,7 @@
             <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
                 <render_engine>ogre2</render_engine>
             </plugin>
-        </gazebo>
+        </gazebo> -->
 
     </xacro:macro>
 </robot>
