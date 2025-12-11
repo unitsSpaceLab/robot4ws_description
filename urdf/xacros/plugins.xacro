@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Archimede">
-    <xacro:macro name="rover_plugins" params="name include_terrain_slip_plugin include_wheels_terramechanic_model">
+    <xacro:macro name="rover_plugins" params="name include_terrain_slip_plugin include_wheels_terramechanic_model load_sensors_plugins:=true">
         
         <!-- Load wheel configuration from YAML, used in diff-drive/ackermann plugin - REMOVE -->
         <!-- <xacro:property name="wheel_config_file" value="$(find robot4ws_description)/urdf/config/wheel_hub.yaml"/>
@@ -93,17 +93,18 @@
         </gazebo>
 
 
-        <!-- sensors remains: lidar, custom odometry
-        <gazebo>
-            <plugin filename="gz-sim-imu-system" name="gz::sim::systems::Imu">
-            </plugin>
-        </gazebo>
+        <!-- sensors remains: lidar, custom odometry -->
+        <xacro:if value="${load_sensors_plugins}">
+            <gazebo>
+            <plugin filename="gz-sim-imu-system" name="gz::sim::systems::Imu"/>
+            </gazebo>
 
-        <gazebo>
+            <gazebo>
             <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
                 <render_engine>ogre2</render_engine>
             </plugin>
-        </gazebo> -->
+            </gazebo>
+        </xacro:if>
 
     </xacro:macro>
 </robot>

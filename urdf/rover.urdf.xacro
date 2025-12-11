@@ -14,6 +14,7 @@
 	<xacro:arg name="rocker_differential" default="false"/>
 	<xacro:arg name="include_terrain_slip_plugin" default="true"/>
 	<xacro:arg name="include_wheels_terramechanic_model" default="false"/>
+	<xacro:arg name="load_sensors_plugins" default="true"/>
 
 
 
@@ -81,7 +82,7 @@
 
 	<!-- Include Rover Plugins -->
 	<xacro:if value="$(arg include_plugins)">
-		<xacro:rover_plugins name="Archimede" include_terrain_slip_plugin="$(arg include_terrain_slip_plugin)" include_wheels_terramechanic_model="$(arg include_wheels_terramechanic_model)"/>
+	<xacro:rover_plugins name="Archimede" include_terrain_slip_plugin="$(arg include_terrain_slip_plugin)" include_wheels_terramechanic_model="$(arg include_wheels_terramechanic_model)" load_sensors_plugins="$(arg load_sensors_plugins)"/>
 	</xacro:if>
 
 	<!-- Include velodyne lidar -->
