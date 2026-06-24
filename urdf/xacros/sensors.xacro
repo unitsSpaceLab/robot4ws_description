@@ -75,6 +75,7 @@
         <!-- FIXED: Using correct link reference with ${name} prefix -->
         <gazebo reference="${name}_realsense_d435i_link">
             <sensor name="rs_camera" type="rgbd_camera">
+                <topic>${name}/rs_camera</topic>
                 <pose>0 0 0 0 0 0</pose>
                 <always_on>1</always_on>
                 <update_rate>30</update_rate>

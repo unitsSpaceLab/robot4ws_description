@@ -26,7 +26,21 @@
             </plugin>
         </gazebo>
 
+        <!-- Rover pose ground truth (not wheel odom even though from odom plugin) -->
         <gazebo>
+            <plugin filename="gz-sim-odometry-publisher-system" name="gz::sim::systems::OdometryPublisher">
+                <odom_frame>world</odom_frame>
+                <robot_base_frame>${name}_base_link</robot_base_frame>
+                <odom_publish_frequency>1000</odom_publish_frequency>
+                <odom_topic>${name}/pose_ground_truth</odom_topic>
+                <tf_topic>tf</tf_topic>
+                <dimensions>3</dimensions>
+                <gaussian_noise>0</gaussian_noise>
+            </plugin>
+        </gazebo>
+
+        <!-- Odometry placeholder, right now is actual position -->
+        <!-- <gazebo>
             <plugin filename="gz-sim-odometry-publisher-system" name="gz::sim::systems::OdometryPublisher">
                 <odom_frame>${name}_odom</odom_frame>
                 <robot_base_frame>${name}_base_link</robot_base_frame>
@@ -39,7 +53,7 @@
                 <rpy_offset>0 0 0</rpy_offset>
                 <gaussian_noise>0</gaussian_noise>
             </plugin>
-        </gazebo>
+        </gazebo> -->
 
         <!-- Terramechanics Plugin (optional) -->
         <xacro:if value="${include_wheels_terramechanic_model}">
@@ -53,13 +67,13 @@
         <!-- sensors remains: lidar, custom odometry. These should be at .world file level -->
         <xacro:if value="${load_sensors_plugins}">
             <gazebo>
-            <plugin filename="gz-sim-imu-system" name="gz::sim::systems::Imu"/>
+                <plugin filename="gz-sim-imu-system" name="gz::sim::systems::Imu"/>
             </gazebo>
 
             <gazebo>
-            <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
-                <render_engine>ogre2</render_engine>
-            </plugin>
+                <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+                    <render_engine>ogre2</render_engine>
+                </plugin>
             </gazebo>
         </xacro:if>
 
