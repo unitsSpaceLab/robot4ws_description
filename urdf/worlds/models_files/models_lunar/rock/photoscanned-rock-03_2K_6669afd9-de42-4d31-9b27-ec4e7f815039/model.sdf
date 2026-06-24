@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+    <model name="photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039">
+        <static>true</static>
+        <link name="link">
+            <collision name="collision">
+                <geometry>
+                    <mesh><uri>mesh/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039_collision.glb</uri></mesh>
+                </geometry>
+            </collision>
+            <visual name="visual">
+                <geometry>
+                    <mesh><uri>mesh/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039.glb</uri></mesh>
+                </geometry>
+            </visual>
+        </link>
+    </model>
+</sdf>

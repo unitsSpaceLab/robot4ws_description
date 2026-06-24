@@ -9,13 +9,14 @@
 	<xacro:arg name="include_kinematics_plugin" default="true"/>
 	<xacro:arg name="include_ros_control" default="true"/>
 	<xacro:arg name="realsense_use_nominal_extrinsics" default="true"/>
-	<xacro:arg name="show_cameras" default="true"/>
-	<xacro:arg name="show_laser_scan" default="true"/>
+	<xacro:arg name="show_cameras" default="false"/>
+	<xacro:arg name="show_laser_scan" default="false"/>
 	<xacro:arg name="rocker_differential" default="false"/>
-	<xacro:arg name="include_terrain_slip_plugin" default="true"/>
+	<xacro:arg name="include_terrain_slip_plugin" default="false"/>
 	<xacro:arg name="include_wheels_terramechanic_model" default="false"/>
 	<xacro:arg name="load_sensors_plugins" default="true"/>
 
+	<xacro:arg name="terramechanics_config_path" default="/home/s250877/archimede_ros2_ws/src/archimede_rover/gz_terramechanics/config"/>
 
 
 	<!-- camera specific parameters -->
@@ -77,12 +78,12 @@
 		<origin xyz="0 0 0" rpy="0 0 0"/>
 	</xacro:sensor_d435i>
 	<!-- Include Sensors -->
-	<xacro:rover_sensors name="Archimede" add_velodyneHDL32E="$(arg add_velodyneHDL32E)">
+	<xacro:rover_sensors name="Archimede" add_velodyneHDL32E="$(arg add_velodyneHDL32E)" include_wheels_terramechanic_model="$(arg include_wheels_terramechanic_model)">
 	</xacro:rover_sensors>
 
 	<!-- Include Rover Plugins -->
 	<xacro:if value="$(arg include_plugins)">
-	<xacro:rover_plugins name="Archimede" include_terrain_slip_plugin="$(arg include_terrain_slip_plugin)" include_wheels_terramechanic_model="$(arg include_wheels_terramechanic_model)" load_sensors_plugins="$(arg load_sensors_plugins)"/>
+		<xacro:rover_plugins name="Archimede" include_terrain_slip_plugin="$(arg include_terrain_slip_plugin)" include_wheels_terramechanic_model="$(arg include_wheels_terramechanic_model)" load_sensors_plugins="$(arg load_sensors_plugins)" terramechanics_config_path="$(arg terramechanics_config_path)"/>
 	</xacro:if>
 
 	<!-- Include velodyne lidar -->

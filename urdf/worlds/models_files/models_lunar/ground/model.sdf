@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+    <model name="terrain">
+        <static>true</static>
+        <link name="link">
+            <collision name="collision">
+                <geometry>
+                    <mesh>
+                        <uri>model://ground/mesh/terrain.stl</uri>
+                    </mesh>
+                </geometry>
+            </collision>
+            <visual name="visual">
+                <geometry>
+                    <mesh>
+                        <uri>model://ground/mesh/terrain.obj</uri>
+                    </mesh>
+                </geometry>
+                <material>
+                    <ambient>1.0 1.0 1.0 1</ambient>
+                    <diffuse>1.0 1.0 1.0 1</diffuse>
+                    <specular>0.1 0.1 0.1 1</specular>
+                    <pbr>
+                        <metal>
+                            <albedo_map>texture/moon_01_diff_4k.jpg</albedo_map>
+                            <normal_map>texture/moon_01_nor_gl_4k.png</normal_map>
+                            <roughness_map>texture/moon_01_rough_4k.png</roughness_map>
+                            <metalness>0.0</metalness>
+                        </metal>
+                    </pbr>
+                </material>
+            </visual>
+        </link>
+    </model>
+</sdf>

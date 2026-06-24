@@ -59,4 +59,7 @@ qtcreator-*
 # Catkin custom files
 CATKIN_IGNORE
 
+# zip files
+*.zip
+
 urdf/worlds/VRC_driving_terrain.world

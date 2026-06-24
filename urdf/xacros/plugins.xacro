@@ -1,11 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Archimede">
-    <xacro:macro name="rover_plugins" params="name include_terrain_slip_plugin include_wheels_terramechanic_model load_sensors_plugins:=true">
-        
-        <!-- Load wheel configuration from YAML, used in diff-drive/ackermann plugin - REMOVE -->
-        <!-- <xacro:property name="wheel_config_file" value="$(find robot4ws_description)/urdf/config/wheel_hub.yaml"/>
-        <xacro:property name="wheel_config" value="${xacro.load_yaml(wheel_config_file)}"/> -->
-
+    <xacro:macro name="rover_plugins" params="name include_terrain_slip_plugin include_wheels_terramechanic_model load_sensors_plugins:=true terramechanics_config_path">
 
         <gazebo>
             <plugin filename="gz-sim-joint-state-publisher-system" 
@@ -13,7 +8,6 @@
                 <topic>${name}/joint_states</topic>
             </plugin>
         </gazebo>
-
 
         <gazebo>
             <plugin filename="gz-sim-pose-publisher-system"
@@ -25,56 +19,11 @@
             </plugin>
         </gazebo>
 
-
         <gazebo>
             <plugin name="my_namespace::JointsControllerPlugin" filename="libJointsControllerPlugin.so">
                 <topic>${name}/cmd_vel_motors</topic>
                 <config_path>$(find robot4ws_gazebo_plugins)/config/joints_control_config.yaml</config_path>
             </plugin>
-
-            <!-- <plugin filename="gz-sim-diff-drive-system"
-                    name="gz::sim::systems::DiffDrive">
-                <left_joint>${name}_fl_drive_joint</left_joint>
-                <left_joint>${name}_bl_drive_joint</left_joint>
-                <right_joint>${name}_fr_drive_joint</right_joint>
-                <right_joint>${name}_br_drive_joint</right_joint>
-
-                <wheel_separation>${2 * wheel_config['steer_joint']['origin']['position']['y']}</wheel_separation>
-                <wheel_radius>${wheel_config['drive']['geom']['radius']}</wheel_radius>
-
-                <topic>cmd_vel</topic>
-                <odom_topic>odom</odom_topic>
-                <frame_id>odom</frame_id>
-                <child_frame_id>${name}_base_link</child_frame_id>
-            </plugin> -->
-
-            <!-- <plugin filename="gz-sim-ackermann-steering-system"
-                    name="gz::sim::systems::AckermannSteering">
-                <left_joint>${name}_fl_drive_joint</left_joint>
-                <left_joint>${name}_bl_drive_joint</left_joint>
-                <right_joint>${name}_fr_drive_joint</right_joint>
-                <right_joint>${name}_br_drive_joint</right_joint>
-                <left_steering_joint>${name}_fl_steer_joint</left_steering_joint>
-                <right_steering_joint>${name}_fr_steer_joint</right_steering_joint>
-
-                <wheel_base>${2 * wheel_config['steer_joint']['origin']['position']['x']}</wheel_base>
-                <wheel_separation>${2 * wheel_config['steer_joint']['origin']['position']['y']}</wheel_separation>
-                <wheel_radius>${wheel_config['drive']['geom']['radius']}</wheel_radius>
-
-                <steering_limit>0.5</steering_limit>
-                <min_velocity>-1</min_velocity>
-                <max_velocity>1</max_velocity>
-                <min_acceleration>-3</min_acceleration>
-                <max_acceleration>3</max_acceleration>
-
-                <topic>cmd_vel</topic>
-                <odom_topic>odom</odom_topic>
-                <frame_id>odom</frame_id>
-                <child_frame_id>${name}_base_link</child_frame_id>
-
-                <publish_odom>false</publish_odom>
-                <publish_tf>false</publish_tf>
-            </plugin> -->
         </gazebo>
 
         <gazebo>
@@ -85,15 +34,23 @@
                 <odom_topic>${name}/odom</odom_topic>
                 <odom_covariance_topic>${name}/odom_with_covariance</odom_covariance_topic>
                 <tf_topic>tf</tf_topic>
-                <dimensions>2</dimensions>
+                <dimensions>3</dimensions>
                 <xyz_offset>0 0 0</xyz_offset>
                 <rpy_offset>0 0 0</rpy_offset>
                 <gaussian_noise>0</gaussian_noise>
             </plugin>
         </gazebo>
 
+        <!-- Terramechanics Plugin (optional) -->
+        <xacro:if value="${include_wheels_terramechanic_model}">
+            <gazebo>
+                <plugin filename="libTerramechanicsSystem.so" name="gz_terramechanics::TerramechanicsSystem">
+                    <config_path>${terramechanics_config_path}</config_path>
+                </plugin>
+            </gazebo>
+        </xacro:if>
 
-        <!-- sensors remains: lidar, custom odometry -->
+        <!-- sensors remains: lidar, custom odometry. These should be at .world file level -->
         <xacro:if value="${load_sensors_plugins}">
             <gazebo>
             <plugin filename="gz-sim-imu-system" name="gz::sim::systems::Imu"/>

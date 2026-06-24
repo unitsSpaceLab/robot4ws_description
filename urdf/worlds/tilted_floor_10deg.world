@@ -14,6 +14,7 @@
       </attenuation>
       <direction>-0.5 0.1 -0.9</direction>
     </light>
+
     <model name='ground_plane'>
       <static>1</static>
       <link name='link'>
@@ -67,11 +68,11 @@
       <static>1</static>
       <pose frame=''> 1 0 0 0 -0.1745 0</pose>  <!-- set P to change tilt value (-rad) -->
       <link name='link'>
-        <pose frame=''> 5 0 0 0 -0 0</pose>
+        <pose frame=''> 5 0 -0.01 0 -0 0</pose>
         <collision name='collision'>
           <geometry>
             <box>
-              <size>10 20 0</size>
+              <size>10 20 0.02</size>
             </box>
           </geometry>
           <surface>
@@ -96,7 +97,7 @@
           <cast_shadows>1</cast_shadows>
           <geometry>
             <box>
-              <size>10 20 0</size>
+              <size>10 20 0.02</size>
             </box>
           </geometry>
           <material>

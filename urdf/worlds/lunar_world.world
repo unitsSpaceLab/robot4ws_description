@@ -1,0 +1,655 @@
+<?xml version='1.0' encoding='utf-8'?>
+<sdf version="1.8">
+    <world name="lunar_world">
+        <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics" />
+        <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands" />
+        <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster" />
+        <plugin filename="gz-sim-contact-system" name="gz::sim::systems::Contact" />
+        <physics name="1ms" type="ignored">
+            <max_step_size>0.001</max_step_size>
+            <real_time_factor>1.0</real_time_factor>
+        </physics>
+        <gravity>0 0 -9.8</gravity>
+        <light name="sun" type="directional">
+            <cast_shadows>true</cast_shadows>
+            <pose>0 0 10 0 0 0</pose>
+            <diffuse>0.8 0.8 0.8 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+            <attenuation>
+                <range>1000</range>
+                <constant>0.9</constant>
+                <linear>0.01</linear>
+                <quadratic>0.001</quadratic>
+            </attenuation>
+            <direction>-0.5 0.1 -0.9</direction>
+        </light>
+        <scene>
+            <ambient>0.4 0.4 0.4 1</ambient>
+            <background>0.7 0.8 0.9 1</background>
+        </scene>
+        <light name="ambient" type="directional">
+            <cast_shadows>false</cast_shadows>
+            <pose>0 0 10 0 0 0</pose>
+            <diffuse>0.6 0.6 0.6 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+            <direction>0.1 0.1 -0.9</direction>
+        </light>
+        <light name="point_light" type="point">
+            <cast_shadows>false</cast_shadows>
+            <pose>0 0 15 0 0 0</pose>
+            <diffuse>0.3 0.3 0.3 1</diffuse>
+            <specular>0.05 0.05 0.05 1</specular>
+            <attenuation>
+                <range>50</range>
+                <constant>0.5</constant>
+                <linear>0.01</linear>
+                <quadratic>0.001</quadratic>
+            </attenuation>
+        </light>
+        <include>
+            <uri>model://ground</uri>
+            <name>lunar_terrain</name>
+            <pose>0 0 0 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_0</name>
+            <pose>-45.5912 -19.1341 338.5423 -0.0307 0.0982 0.7825</pose>
+            <scale>1.036 1.036 1.036</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_1</name>
+            <pose>-22.4519 14.3237 342.0545 0.1483 -0.0212 5.5926</pose>
+            <scale>1.665 1.665 1.665</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_2</name>
+            <pose>-36.4914 -64.7552 337.1019 0.0542 0.1317 1.4038</pose>
+            <scale>1.098 1.098 1.098</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_3</name>
+            <pose>42.3343 -64.9826 338.9487 0.1205 -0.0256 0.3204</pose>
+            <scale>1.964 1.964 1.964</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_4</name>
+            <pose>-22.1199 65.7294 335.8336 -0.0821 -0.0894 5.8487</pose>
+            <scale>1.398 1.398 1.398</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_5</name>
+            <pose>22.8752 -13.9622 345.3926 0.0441 -0.0225 3.9687</pose>
+            <scale>1.516 1.516 1.516</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_6</name>
+            <pose>43.4210 3.1697 339.5576 0.1147 -0.0292 4.6753</pose>
+            <scale>1.576 1.576 1.576</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_7</name>
+            <pose>43.0773 38.1228 337.4806 -0.1167 -0.1144 3.9343</pose>
+            <scale>1.420 1.420 1.420</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_8</name>
+            <pose>-46.5398 9.0169 339.0959 -0.1102 -0.0008 2.6471</pose>
+            <scale>1.725 1.725 1.725</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_9</name>
+            <pose>45.8706 -33.8413 340.0341 -0.0389 -0.1209 5.4407</pose>
+            <scale>1.552 1.552 1.552</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_10</name>
+            <pose>46.2047 -41.1862 337.7551 -0.0013 -0.0836 4.8814</pose>
+            <scale>0.723 0.723 0.723</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_11</name>
+            <pose>-6.7407 63.9318 336.1243 -0.1476 -0.1086 4.5307</pose>
+            <scale>0.513 0.513 0.513</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_12</name>
+            <pose>13.3196 65.7029 335.6961 0.1348 0.1337 4.7799</pose>
+            <scale>0.535 0.535 0.535</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_13</name>
+            <pose>21.9335 64.1526 335.3749 -0.0454 0.1315 4.4305</pose>
+            <scale>1.338 1.338 1.338</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_14</name>
+            <pose>0.9551 64.1757 335.3866 -0.0590 0.1477 0.9875</pose>
+            <scale>0.735 0.735 0.735</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_15</name>
+            <pose>32.7208 -68.0043 337.9148 -0.0249 0.0095 3.6573</pose>
+            <scale>1.072 1.072 1.072</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_16</name>
+            <pose>25.9908 22.2513 340.4223 -0.0115 0.0088 2.6116</pose>
+            <scale>0.648 0.648 0.648</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_17</name>
+            <pose>-22.1881 -35.5905 341.8520 0.0011 -0.1083 4.2319</pose>
+            <scale>1.682 1.682 1.682</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_18</name>
+            <pose>-45.3882 2.4147 339.6060 0.1480 -0.0176 3.7352</pose>
+            <scale>0.687 0.687 0.687</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_19</name>
+            <pose>-8.2595 35.7783 339.3065 0.0845 -0.1374 0.8242</pose>
+            <scale>1.935 1.935 1.935</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_20</name>
+            <pose>-9.1650 -40.6543 342.5530 0.0331 -0.1472 5.9117</pose>
+            <scale>1.338 1.338 1.338</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_21</name>
+            <pose>-11.4048 -64.2608 338.1139 0.0128 -0.0175 4.4724</pose>
+            <scale>0.710 0.710 0.710</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_22</name>
+            <pose>44.9826 64.4746 336.6097 0.0245 0.0913 6.1223</pose>
+            <scale>0.679 0.679 0.679</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_23</name>
+            <pose>-43.5902 15.4796 339.0860 -0.0333 -0.0427 5.3344</pose>
+            <scale>1.072 1.072 1.072</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_24</name>
+            <pose>44.2042 -21.4334 340.3224 0.1273 0.0421 0.5655</pose>
+            <scale>0.758 0.758 0.758</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_25</name>
+            <pose>-17.2803 -44.8983 341.0032 -0.0273 -0.0135 3.2512</pose>
+            <scale>1.915 1.915 1.915</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_26</name>
+            <pose>-43.4550 34.9985 336.9914 -0.0429 0.0213 1.2363</pose>
+            <scale>1.774 1.774 1.774</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_27</name>
+            <pose>7.4913 67.8384 334.9731 -0.0993 0.0809 3.6059</pose>
+            <scale>0.745 0.745 0.745</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_28</name>
+            <pose>-43.4139 28.8282 337.5040 -0.0820 0.0247 4.3372</pose>
+            <scale>1.024 1.024 1.024</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_29</name>
+            <pose>-9.6959 -47.1750 340.6420 0.0034 0.0367 0.3307</pose>
+            <scale>0.840 0.840 0.840</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_30</name>
+            <pose>-43.1153 -56.2345 337.6157 -0.0834 0.1383 3.4469</pose>
+            <scale>1.433 1.433 1.433</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_31</name>
+            <pose>45.7998 -10.8578 337.9157 0.0802 0.1407 0.8636</pose>
+            <scale>0.641 0.641 0.641</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_32</name>
+            <pose>24.3763 3.1056 343.1189 0.0247 -0.1072 3.4153</pose>
+            <scale>1.164 1.164 1.164</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_33</name>
+            <pose>9.0324 -67.1035 338.3317 0.0375 -0.1274 1.5608</pose>
+            <scale>1.709 1.709 1.709</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_34</name>
+            <pose>-5.7855 -50.7157 340.4019 0.0358 -0.0200 2.2069</pose>
+            <scale>0.705 0.705 0.705</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_35</name>
+            <pose>46.1188 57.4703 336.2554 -0.0893 -0.0217 5.8104</pose>
+            <scale>1.802 1.802 1.802</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_36</name>
+            <pose>-32.7036 64.7731 338.1267 0.0476 -0.1069 1.7098</pose>
+            <scale>1.654 1.654 1.654</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_37</name>
+            <pose>-8.7514 66.7034 335.5666 -0.1250 0.0502 3.3175</pose>
+            <scale>0.615 0.615 0.615</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_38</name>
+            <pose>17.1244 -66.1250 338.5641 -0.0780 -0.1350 1.5788</pose>
+            <scale>1.163 1.163 1.163</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_39</name>
+            <pose>-31.0445 21.7075 339.8587 -0.0428 -0.0591 0.1534</pose>
+            <scale>0.520 0.520 0.520</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_40</name>
+            <pose>45.2633 47.7866 336.8722 0.0055 0.0625 5.7481</pose>
+            <scale>0.757 0.757 0.757</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_41</name>
+            <pose>-4.4776 65.9911 336.0278 -0.1228 -0.0768 3.8326</pose>
+            <scale>0.528 0.528 0.528</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_42</name>
+            <pose>1.9865 0.1805 351.0339 -0.1352 0.0438 1.4485</pose>
+            <scale>1.845 1.845 1.845</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_43</name>
+            <pose>44.5998 21.1462 337.9571 0.0133 -0.1500 0.0517</pose>
+            <scale>0.769 0.769 0.769</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_44</name>
+            <pose>-44.4714 -11.7682 340.0060 0.0965 0.0322 0.6516</pose>
+            <scale>1.456 1.456 1.456</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_45</name>
+            <pose>-6.5283 -35.0902 344.7178 0.0921 0.0675 0.8342</pose>
+            <scale>1.202 1.202 1.202</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_46</name>
+            <pose>23.9274 67.6230 336.6573 0.0647 0.0581 0.6059</pose>
+            <scale>0.522 0.522 0.522</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_47</name>
+            <pose>-43.6529 -67.5743 336.9926 0.0291 0.1076 0.3210</pose>
+            <scale>1.641 1.641 1.641</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_48</name>
+            <pose>-4.0404 50.5546 337.1048 0.0518 0.1402 1.3906</pose>
+            <scale>1.737 1.737 1.737</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_49</name>
+            <pose>-27.7090 -18.5258 343.3133 0.0668 -0.0754 4.7731</pose>
+            <scale>1.896 1.896 1.896</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_50</name>
+            <pose>-44.0280 64.4991 338.0483 -0.0955 0.0237 3.1936</pose>
+            <scale>0.812 0.812 0.812</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_51</name>
+            <pose>-24.7238 -47.2351 340.1329 -0.0241 -0.0513 3.4049</pose>
+            <scale>0.507 0.507 0.507</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_52</name>
+            <pose>-17.5483 -64.9818 337.9574 0.1407 0.0110 1.4653</pose>
+            <scale>1.843 1.843 1.843</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_53</name>
+            <pose>45.6116 -14.1447 337.9538 0.1148 -0.0506 2.5555</pose>
+            <scale>0.759 0.759 0.759</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_54</name>
+            <pose>45.5715 30.6329 337.8210 0.0998 -0.0508 0.6394</pose>
+            <scale>1.476 1.476 1.476</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_55</name>
+            <pose>44.8679 -60.0133 338.7491 0.0105 -0.1492 2.8087</pose>
+            <scale>0.778 0.778 0.778</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_56</name>
+            <pose>-39.4047 64.4646 337.9439 -0.1114 -0.0115 3.6852</pose>
+            <scale>0.944 0.944 0.944</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_57</name>
+            <pose>-43.3399 -44.5906 338.8483 -0.1475 0.0597 2.9888</pose>
+            <scale>1.831 1.831 1.831</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_58</name>
+            <pose>-20.5272 -4.0798 346.4348 -0.0062 0.1331 0.3412</pose>
+            <scale>1.687 1.687 1.687</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_59</name>
+            <pose>45.2899 15.2645 338.5866 -0.0416 -0.0976 1.2177</pose>
+            <scale>1.912 1.912 1.912</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_60</name>
+            <pose>-3.7339 -55.0046 339.5994 -0.1054 -0.0468 0.5953</pose>
+            <scale>1.259 1.259 1.259</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_61</name>
+            <pose>-7.1296 -66.5475 337.9850 0.1363 0.1025 5.6450</pose>
+            <scale>0.885 0.885 0.885</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_62</name>
+            <pose>-39.8934 56.2554 337.9980 0.0028 0.0076 2.3350</pose>
+            <scale>1.070 1.070 1.070</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_63</name>
+            <pose>44.8958 -27.3183 340.5338 -0.0529 0.1040 5.5324</pose>
+            <scale>0.897 0.897 0.897</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_64</name>
+            <pose>2.1017 -65.0660 338.3737 0.0594 -0.0493 3.2856</pose>
+            <scale>0.512 0.512 0.512</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_65</name>
+            <pose>36.9901 67.0621 337.2658 -0.0517 -0.0170 4.6440</pose>
+            <scale>0.794 0.794 0.794</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_66</name>
+            <pose>-26.3949 56.1797 336.5183 0.1228 0.0414 0.0716</pose>
+            <scale>1.361 1.361 1.361</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_67</name>
+            <pose>-11.4881 -32.1831 345.1059 -0.1260 -0.1379 3.5400</pose>
+            <scale>0.807 0.807 0.807</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_68</name>
+            <pose>30.9911 19.4835 340.5796 -0.1230 -0.0395 2.2215</pose>
+            <scale>1.510 1.510 1.510</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_69</name>
+            <pose>-36.0304 35.0910 337.3715 -0.0463 -0.1332 3.9191</pose>
+            <scale>0.712 0.712 0.712</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_70</name>
+            <pose>45.2056 -49.2668 335.4920 0.0194 0.0972 2.8574</pose>
+            <scale>1.748 1.748 1.748</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_71</name>
+            <pose>29.4301 65.0885 335.6171 0.0197 0.0609 0.4825</pose>
+            <scale>1.163 1.163 1.163</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_72</name>
+            <pose>-29.5689 15.7673 341.4669 -0.1203 -0.0212 4.9391</pose>
+            <scale>1.637 1.637 1.637</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_73</name>
+            <pose>36.0329 -64.6803 338.9617 0.0830 -0.1204 4.7561</pose>
+            <scale>1.131 1.131 1.131</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_74</name>
+            <pose>-3.8834 6.7403 348.4914 0.0813 -0.0326 1.4494</pose>
+            <scale>1.059 1.059 1.059</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_75</name>
+            <pose>-45.9427 22.4964 337.8003 -0.0104 0.0873 0.6278</pose>
+            <scale>1.035 1.035 1.035</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_76</name>
+            <pose>26.1769 -67.9185 338.4697 0.0113 -0.1076 2.9654</pose>
+            <scale>1.881 1.881 1.881</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_77</name>
+            <pose>-36.3624 -3.5778 341.4589 0.0527 0.0011 0.1800</pose>
+            <scale>1.568 1.568 1.568</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_78</name>
+            <pose>-41.5511 -38.4570 339.4779 0.0926 0.1417 2.5137</pose>
+            <scale>1.076 1.076 1.076</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_79</name>
+            <pose>4.3361 45.1621 339.0620 0.0146 0.1226 0.6128</pose>
+            <scale>1.436 1.436 1.436</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_80</name>
+            <pose>21.1528 44.4944 337.0892 0.1062 -0.0602 3.1060</pose>
+            <scale>0.853 0.853 0.853</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_81</name>
+            <pose>10.8976 -56.2508 339.5990 0.1209 0.0223 2.0001</pose>
+            <scale>1.040 1.040 1.040</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_82</name>
+            <pose>14.8186 60.9157 335.8673 0.1192 -0.0212 1.6545</pose>
+            <scale>1.194 1.194 1.194</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_83</name>
+            <pose>-44.4210 45.5314 337.2349 0.1202 -0.0100 3.9958</pose>
+            <scale>0.799 0.799 0.799</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_84</name>
+            <pose>-18.5528 -56.9154 339.2867 -0.0050 0.1422 0.0361</pose>
+            <scale>1.184 1.184 1.184</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_85</name>
+            <pose>-21.0231 46.1839 337.2705 -0.1162 0.1371 5.8735</pose>
+            <scale>0.738 0.738 0.738</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_86</name>
+            <pose>-46.0466 -26.2390 337.9596 -0.1478 -0.0262 0.1169</pose>
+            <scale>1.264 1.264 1.264</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_87</name>
+            <pose>8.2937 -20.7479 350.7258 -0.1325 -0.0433 1.7833</pose>
+            <scale>1.781 1.781 1.781</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_88</name>
+            <pose>16.0413 3.7366 345.8674 -0.0668 0.1471 5.9504</pose>
+            <scale>1.960 1.960 1.960</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_89</name>
+            <pose>-30.8210 32.5740 338.3265 -0.0745 0.1395 0.2020</pose>
+            <scale>1.164 1.164 1.164</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_90</name>
+            <pose>-13.6799 8.6499 345.4221 0.0635 0.0608 4.8950</pose>
+            <scale>1.680 1.680 1.680</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_91</name>
+            <pose>-30.6296 -66.0978 337.5586 0.1391 0.0100 5.8997</pose>
+            <scale>1.390 1.390 1.390</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_92</name>
+            <pose>46.3011 -3.9531 339.3797 -0.0077 0.0547 3.7234</pose>
+            <scale>1.095 1.095 1.095</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_93</name>
+            <pose>35.2101 -34.8135 341.1235 -0.0129 -0.0771 1.7681</pose>
+            <scale>1.722 1.722 1.722</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_94</name>
+            <pose>44.7437 -54.8733 336.7199 0.1216 0.0911 0.8091</pose>
+            <scale>0.998 0.998 0.998</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_95</name>
+            <pose>-16.1760 -22.6829 346.2910 0.0483 0.0649 0.4121</pose>
+            <scale>0.876 0.876 0.876</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_96</name>
+            <pose>-46.5817 -4.8089 339.9960 0.1273 -0.0289 2.8106</pose>
+            <scale>1.988 1.988 1.988</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_97</name>
+            <pose>-44.1249 51.1319 336.7336 -0.1386 -0.0192 4.0634</pose>
+            <scale>1.604 1.604 1.604</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_98</name>
+            <pose>22.3034 27.2655 339.9861 0.1033 -0.0100 0.2518</pose>
+            <scale>1.513 1.513 1.513</scale>
+        </include>
+        <include>
+            <uri>model://rock/photoscanned-rock-03_2K_6669afd9-de42-4d31-9b27-ec4e7f815039</uri>
+            <name>rock_99</name>
+            <pose>7.3237 -8.3657 351.6931 0.1187 -0.0926 5.3575</pose>
+            <scale>1.880 1.880 1.880</scale>
+        </include>
+    </world>
+</sdf>
