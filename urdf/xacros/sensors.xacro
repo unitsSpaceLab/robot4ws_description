@@ -12,13 +12,7 @@
     <xacro:arg name="visualize_scan" default="true"/>
     <xacro:arg name="visualize_lidar" default="true"/>
 
-	<xacro:macro name="rover_sensors" params="name add_velodyneHDL32E:=false include_wheels_terramechanic_model">
-    <!-- NOTE: the gz_frame_id block of each sensor will give a gazebo warning like this:
-        [gz-2] Warning [Utils.cc:132] [/sdf/model[@name="Archimede"]/link[@name="Archimede_base_link"]/sensor[@name="rs_camera"]/gz_frame_id:<data-string>:L107]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
-
-        This is normal because the block is not a standard sdf element, but it is read instead by the sensors plugins in order to set 
-        the correct frame_id in the gz msg (and ros msg through the bridge)
-    -->
+	<xacro:macro name="rover_sensors" params="name include_realsense_camera:=true add_velodyneHDL32E:=false include_wheels_terramechanic_model">
 
         <!-- IMU -->
         <gazebo reference="${name}_imu_link">
@@ -28,7 +22,7 @@
                 <visualize>$(arg visualize_imu)</visualize>
                 <update_rate>50</update_rate>
                 <topic>${name}/imu</topic>
-                <gz_frame_id>${name}_imu_link</gz_frame_id>
+                <frame_id>${name}_imu_link</frame_id>
             </sensor>
             <material>Gazebo/Grey</material>
         </gazebo>
@@ -40,7 +34,7 @@
                 <pose>0 0 0 0 0 0</pose>
                 <visualize>$(arg visualize_scan)</visualize>
                 <update_rate>10</update_rate>
-                <gz_frame_id>${name}_scan_link</gz_frame_id>
+                <frame_id>${name}_scan_link</frame_id>
                 <lidar>
                     <scan>
                         <horizontal>
@@ -72,58 +66,60 @@
         </gazebo>
 
         <!-- RGBD CAMERA (RealSense D435i) -->
-        <gazebo reference="rs_d435i_color_frame">
-            <sensor name="rs_camera" type="rgbd_camera">
-                <topic>${name}/rs_camera</topic>
-                <pose>0.005 0 0 0 0 0</pose>
-                <always_on>1</always_on>
-                <update_rate>30</update_rate>
-                <gz_frame_id>rs_d435i_color_frame</gz_frame_id>
-                <camera name="rs_camera">
-                    <horizontal_fov>1.50098</horizontal_fov>
-                    <lens>
-                        <intrinsics>
-                            <!-- fx = fy = width / ( 2 * tan (hfov / 2 ) ) -->
-                            <fx>343.159</fx>
-                            <fy>343.159</fy>
-                            <!-- cx = ( width - 1 ) / 2 -->
-                            <cx>319.5</cx>
-                            <!-- cy = ( height - 1 ) / 2 -->
-                            <cy>179.5</cy>
-                            <s>0</s>
-                        </intrinsics>
-                    </lens>
-                    <distortion>
-                        <k1>0.0</k1>
-                        <k2>0.0</k2>
-                        <k3>0.0</k3>
-                        <p1>0.0</p1>
-                        <p2>0.0</p2>
-                        <center>0.5 0.5</center>
-                    </distortion>
-                    <image>
-                        <width>640</width>
-                        <height>360</height>
-                        <format>R8G8B8</format>
-                    </image>
-                    <clip>
-                        <near>0.01</near>
-                        <far>100</far>
-                    </clip>
-                    <depth_camera>
+        <xacro:if value="$(arg include_realsense_camera)">
+            <gazebo reference="rs_d435i_color_frame">
+                <sensor name="rs_camera" type="rgbd_camera">
+                    <topic>${name}/rs_camera</topic>
+                    <pose>0.005 0 0 0 0 0</pose>
+                    <always_on>1</always_on>
+                    <update_rate>30</update_rate>
+                    <frame_id>rs_d435i_color_frame</frame_id>
+                    <camera name="rs_camera">
+                        <horizontal_fov>1.50098</horizontal_fov>
+                        <lens>
+                            <intrinsics>
+                                <!-- fx = fy = width / ( 2 * tan (hfov / 2 ) ) -->
+                                <fx>343.159</fx>
+                                <fy>343.159</fy>
+                                <!-- cx = ( width - 1 ) / 2 -->
+                                <cx>319.5</cx>
+                                <!-- cy = ( height - 1 ) / 2 -->
+                                <cy>179.5</cy>
+                                <s>0</s>
+                            </intrinsics>
+                        </lens>
+                        <distortion>
+                            <k1>0.0</k1>
+                            <k2>0.0</k2>
+                            <k3>0.0</k3>
+                            <p1>0.0</p1>
+                            <p2>0.0</p2>
+                            <center>0.5 0.5</center>
+                        </distortion>
+                        <image>
+                            <width>640</width>
+                            <height>360</height>
+                            <format>R8G8B8</format>
+                        </image>
                         <clip>
-                        <near>0.1</near>
-                        <far>100</far>
+                            <near>0.01</near>
+                            <far>100</far>
                         </clip>
-                    </depth_camera>
-                    <noise>
-                        <type>gaussian</type>
-                        <mean>0</mean>
-                        <stddev>0.007</stddev>
-                    </noise>
-                </camera>
-            </sensor>
-        </gazebo>
+                        <depth_camera>
+                            <clip>
+                            <near>0.1</near>
+                            <far>100</far>
+                            </clip>
+                        </depth_camera>
+                        <noise>
+                            <type>gaussian</type>
+                            <mean>0</mean>
+                            <stddev>0.007</stddev>
+                        </noise>
+                    </camera>
+                </sensor>
+            </gazebo>
+        </xacro:if>
 
         <!-- OPTIONAL 3D LIDAR -->
         <xacro:if value="$(arg add_velodyneHDL32E)">
@@ -141,7 +137,7 @@
                     <pose>0 0 0 0 0 0</pose>
                     <visualize>$(arg visualize_lidar)</visualize>
                     <update_rate>5</update_rate>
-                    <gz_frame_id>${name}_velodyne_link</gz_frame_id>
+                    <frame_id>${name}_velodyne_link</frame_id>
                     <lidar>
                         <scan>
                             <horizontal>

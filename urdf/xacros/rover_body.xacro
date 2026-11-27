@@ -5,7 +5,7 @@
 		@email: matteo.caruso@phd.units.it
 		@email: matteo.caruso1993@gmail.com
 	-->
-	<xacro:macro name="rover_base" params="name has_differential">
+	<xacro:macro name="rover_base" params="name has_differential include_realsense_camera:=true">
 		<!-- Depending whether the has_differential flag is on, select the correct yaml file -->
 		<xacro:if value="${has_differential}">
 			<xacro:property name="filename" value="$(find robot4ws_description)/urdf/config/body_only.yaml"/>
@@ -203,14 +203,14 @@
 		</joint> -->
 
 
-
-		<link name="${name}_realsense_d435i_link"/>
-		<joint name="${name}_realsense_joint" type="fixed">
-			<parent link="${name}_base_link_dummy"/>
-			<child link="${name}_realsense_d435i_link"/>
-			<origin xyz="0.14 0 0.14" rpy="0 0 0"/>
-		</joint>
-
+		<xacro:if value="$(arg include_realsense_camera)">
+			<link name="${name}_realsense_d435i_link"/>
+			<joint name="${name}_realsense_joint" type="fixed">
+				<parent link="${name}_base_link_dummy"/>
+				<child link="${name}_realsense_d435i_link"/>
+				<origin xyz="0.14 0 0.14" rpy="0 0 0"/>
+			</joint>
+		</xacro:if>
 
 
 

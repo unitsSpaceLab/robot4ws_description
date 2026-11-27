@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Archimede">
-    <xacro:macro name="rover_plugins" params="name include_terrain_slip_plugin include_wheels_terramechanic_model load_sensors_plugins:=true terramechanics_config_path">
+    <xacro:macro name="rover_plugins" params="name use_dynamixel_msg:=false include_terrain_slip_plugin include_wheels_terramechanic_model 
+        load_sensors_plugins:=true terramechanics_config_path">
 
         <gazebo>
             <plugin filename="gz-sim-joint-state-publisher-system" 
@@ -19,12 +20,23 @@
             </plugin>
         </gazebo>
 
-        <gazebo>
-            <plugin name="my_namespace::JointsControllerPlugin" filename="libJointsControllerPlugin.so">
-                <topic>${name}/cmd_vel_motors</topic>
-                <config_path>$(find robot4ws_gazebo_plugins)/config/joints_control_config.yaml</config_path>
-            </plugin>
-        </gazebo>
+        <xacro:unless value="${use_dynamixel_msg}">
+            <gazebo>
+                <plugin name="my_namespace::JointsControllerPlugin" filename="libJointsControllerPlugin.so">
+                    <topic>${name}/cmd_vel_motors</topic>
+                    <config_path>$(find robot4ws_gazebo_plugins)/config/joints_control_config.yaml</config_path>
+                </plugin>
+            </gazebo>
+        </xacro:unless>
+
+        <xacro:if value="${use_dynamixel_msg}">
+            <gazebo>
+                <plugin name="my_namespace::JointsControllerPluginDynamixel" filename="libJointsControllerPluginDynamixel.so">
+                    <topic>${name}/cmd_vel_motors</topic>
+                    <config_path>$(find robot4ws_gazebo_plugins)/config/joints_control_config.yaml</config_path>
+                </plugin>
+            </gazebo>
+        </xacro:if>
 
         <!-- Rover pose ground truth (not wheel odom even though from odom plugin) -->
         <gazebo>
@@ -75,6 +87,15 @@
                     <render_engine>ogre2</render_engine>
                 </plugin>
             </gazebo>
+
+            <xacro:if value="${include_wheels_terramechanic_model}">
+                <gazebo>
+                    <plugin filename="gz-sim-contact-system"
+                        name="gz::sim::systems::Contact">
+                    </plugin>
+                </gazebo>
+            </xacro:if>
+
         </xacro:if>
 
     </xacro:macro>
